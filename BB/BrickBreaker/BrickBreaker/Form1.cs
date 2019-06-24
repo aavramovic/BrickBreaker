@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace BrickBreaker
 {
-    enum Mode
+    enum Status
     {
         MAIN_MENU,
         SELECT_LEVEL,
@@ -19,16 +19,15 @@ namespace BrickBreaker
     public partial class Form1 : Form
     {
         private Game game;
-        private Mode mode;  
+        private Status status;
         private string fileName;
-        private List<Control> controls;
 
         public Form1()
         {
             InitializeComponent();
             DoubleBuffered = true;
-            controls = new List<Control>();
 
+            game = new Game();
             DrawMainMenu();
         }
 
@@ -43,31 +42,41 @@ namespace BrickBreaker
          */
         private void DrawMainMenu()
         {
-            this.Controls.Clear();
+            Controls.Clear();
 
             Button buttonPlay = CreateButton(80, 45, 225, 55, "Play");
             buttonPlay.Click += new EventHandler(BtnPlay_Click);
-            controls.Add(buttonPlay);
+            Controls.Add(buttonPlay);
 
             Button buttonSaveGame = CreateButton(125, 115, 225, 55, "Save Game");
             buttonSaveGame.Click += new EventHandler(BtnSaveGame_Click);
-            controls.Add(buttonSaveGame);
+            Controls.Add(buttonSaveGame);
 
             Button buttonLoadGame = CreateButton(80, 185, 225, 55, "Load Game");
             buttonLoadGame.Click += new EventHandler(BtnLoadGame_Click);
-            controls.Add(buttonLoadGame);
+            Controls.Add(buttonLoadGame);
 
             Button buttonOptions = CreateButton(125, 255, 225, 55, "Options");
             buttonOptions.Click += new EventHandler(BtnOptions_Click);
-            controls.Add(buttonOptions);
+            Controls.Add(buttonOptions);
 
             Button buttonQuit = CreateButton(80, 325, 225, 55, "Quit");
             buttonQuit.Click += new EventHandler(BtnQuit_Click);
-            controls.Add(buttonQuit);
+            Controls.Add(buttonQuit);
 
-            controls.ForEach(c => this.Controls.Add(c));
+            Label labelScore = CreateLabel(405, 95, 169, 53, "Level:");
+            Controls.Add(labelScore);
 
-            mode = Mode.MAIN_MENU;
+            Label labelGameScore = CreateLabel(405, 140, 48, 53, game.CurrentLevel.ToString());
+            Controls.Add(labelGameScore);
+
+            Label labelLevel = CreateLabel(405, 235, 169, 53, "Score:");
+            Controls.Add(labelLevel);
+
+            Label labelGameLevel = CreateLabel(405, 280, 169, 53, game.CurrentScore.ToString());
+            Controls.Add(labelGameLevel);
+
+            status = Status.MAIN_MENU;
         }
 
         private void DrawSelectLevel()
@@ -87,13 +96,22 @@ namespace BrickBreaker
             newButton.ForeColor = Color.White;
             newButton.Font = new Font("Showcard Gothic", 14, FontStyle.Regular);
             newButton.Text = text;
-            newButton.Name = "btn" + text.Replace(" ", "");
             return newButton;
         }
 
-        private Label CreateLabel()
+        /**
+         *  Креира контрола-лабела со зададени почетни x и y координати, ширина, висина и текст кој треба да се прикаже на лабелата.
+         */
+        private Label CreateLabel(int x, int y, int width, int height, string text)
         {
-            throw new NotImplementedException();
+            Label newLabel = new Label();
+            newLabel.Location = new Point(x, y);
+            newLabel.Size = new Size(width, height);
+            newLabel.BackColor = Color.Black;
+            newLabel.ForeColor = Color.White;
+            newLabel.Font = new Font("Showcard Gothic", 26, FontStyle.Regular);
+            newLabel.Text = text;
+            return newLabel;
         }
 
         private void BtnPlay_Click(object sender, EventArgs e)
@@ -113,12 +131,15 @@ namespace BrickBreaker
 
         private void BtnOptions_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException("OPTS");
+            new Options().Show();
         }
 
         private void BtnQuit_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            if (MessageBox.Show("Are you sure you want to quit?", "Quit game", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                Application.Exit();
+            }
         }
     }
 }

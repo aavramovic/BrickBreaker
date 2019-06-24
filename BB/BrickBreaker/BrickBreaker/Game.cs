@@ -11,5 +11,10 @@ namespace BrickBreaker
     {
         public int CurrentLevel { get; set; }
         public int CurrentScore { get; set; }
+        public Game()
+        {
+            CurrentLevel = 1;
+            CurrentScore = 0;
+        }
     }
 }
