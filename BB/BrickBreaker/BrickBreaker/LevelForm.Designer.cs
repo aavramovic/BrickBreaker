@@ -1,6 +1,6 @@
 ﻿namespace BrickBreaker
 {
-    partial class Form1
+    partial class LevelForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,35 +28,34 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.LevelPanel = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
-            // imageList1
+            // LevelPanel
             // 
-            this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-            this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
-            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+            this.LevelPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.LevelPanel.Location = new System.Drawing.Point(0, 0);
+            this.LevelPanel.Name = "LevelPanel";
+            this.LevelPanel.Size = new System.Drawing.Size(800, 450);
+            this.LevelPanel.TabIndex = 0;
+            this.LevelPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.LevelPanel_Paint);
             // 
-            // Form1
+            // LevelForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(663, 416);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.MaximumSize = new System.Drawing.Size(679, 454);
-            this.MinimumSize = new System.Drawing.Size(679, 454);
-            this.Name = "Form1";
-            this.Text = "Bricks Breaker";
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
+            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.LevelPanel);
+            this.DoubleBuffered = true;
+            this.Name = "LevelForm";
+            this.Text = "LevelForm";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.ImageList imageList1;
+        private System.Windows.Forms.Panel LevelPanel;
     }
 }
-

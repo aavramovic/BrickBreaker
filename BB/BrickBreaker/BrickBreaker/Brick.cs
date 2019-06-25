@@ -7,20 +7,21 @@ using System.Threading.Tasks;
 
 namespace BrickBreaker
 {
-    public class Bouncer
+    public class Brick
     {
         public float Width { get; set; }
         public float Height { get; set; }
         public Point Position { get; set; }
         public Color Coloring { get; set; }
-        public double Speed { get; set; }
+        public int Lives { get; set; }
 
-        public Bouncer(float width, float height, Point position, Color coloring)
+        public Brick(float width, float height, Point position, Color coloring, int lives)
         {
             Width = width;
             Height = height;
             Position = position;
             Coloring = coloring;
+            Lives = lives;
         }
 
         public void Draw(Graphics g)
