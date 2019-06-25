@@ -12,15 +12,14 @@ namespace BrickBreaker
 {
     enum Status
     {
-        MAIN_MENU,
-        SELECT_LEVEL,
+        MENU,
         PLAY
     }
     public partial class Form1 : Form
     {
         private Game game;
         private Status status;
-        private string fileName;
+        //private string fileName;
 
         public Form1()
         {
@@ -33,7 +32,14 @@ namespace BrickBreaker
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
-            
+            if(status == Status.PLAY)
+            {
+
+            }
+            else
+            {
+                e.Graphics.DrawImageUnscaled(BrickBreaker.Properties.Resources.MenuBackgroundImage, 0, 0);
+            }
         }
 
         /**
@@ -44,44 +50,48 @@ namespace BrickBreaker
         {
             Controls.Clear();
 
-            Button buttonPlay = CreateButton(80, 45, 225, 55, "Play");
+            Button buttonPlay = CreateButton(80, 120, 225, 55, "Play");
             buttonPlay.Click += new EventHandler(BtnPlay_Click);
             Controls.Add(buttonPlay);
 
-            Button buttonSaveGame = CreateButton(125, 115, 225, 55, "Save Game");
+            Button buttonSaveGame = CreateButton(125, 185, 225, 55, "Save Game");
             buttonSaveGame.Click += new EventHandler(BtnSaveGame_Click);
             Controls.Add(buttonSaveGame);
 
-            Button buttonLoadGame = CreateButton(80, 185, 225, 55, "Load Game");
+            Button buttonLoadGame = CreateButton(80, 250, 225, 55, "Load Game");
             buttonLoadGame.Click += new EventHandler(BtnLoadGame_Click);
             Controls.Add(buttonLoadGame);
 
-            Button buttonOptions = CreateButton(125, 255, 225, 55, "Options");
+            Button buttonOptions = CreateButton(125, 315, 225, 55, "Options");
             buttonOptions.Click += new EventHandler(BtnOptions_Click);
             Controls.Add(buttonOptions);
 
-            Button buttonQuit = CreateButton(80, 325, 225, 55, "Quit");
+            Button buttonQuit = CreateButton(80, 380, 225, 55, "Quit");
             buttonQuit.Click += new EventHandler(BtnQuit_Click);
             Controls.Add(buttonQuit);
 
-            Label labelScore = CreateLabel(405, 95, 169, 53, "Level:");
+            Label labelScore = CreateLabel(405, 145, 169, 53, "Level:");
             Controls.Add(labelScore);
 
-            Label labelGameScore = CreateLabel(405, 140, 48, 53, game.CurrentLevel.ToString());
+            Label labelGameScore = CreateLabel(405, 190, 48, 53, game.CurrentLevel.ToString());
             Controls.Add(labelGameScore);
 
-            Label labelLevel = CreateLabel(405, 235, 169, 53, "Score:");
+            Label labelLevel = CreateLabel(405, 285, 169, 53, "Score:");
             Controls.Add(labelLevel);
 
-            Label labelGameLevel = CreateLabel(405, 280, 169, 53, game.CurrentScore.ToString());
+            Label labelGameLevel = CreateLabel(405, 330, 169, 53, game.CurrentScore.ToString());
             Controls.Add(labelGameLevel);
 
-            status = Status.MAIN_MENU;
+            status = Status.MENU;
         }
 
         private void DrawSelectLevel()
         {
-            throw new NotImplementedException();
+            Controls.Clear();
+
+            
+
+            status = Status.MENU;
         }
 
         /**
@@ -107,7 +117,7 @@ namespace BrickBreaker
             Label newLabel = new Label();
             newLabel.Location = new Point(x, y);
             newLabel.Size = new Size(width, height);
-            newLabel.BackColor = Color.Black;
+            newLabel.BackColor = Color.Transparent;
             newLabel.ForeColor = Color.White;
             newLabel.Font = new Font("Showcard Gothic", 26, FontStyle.Regular);
             newLabel.Text = text;
@@ -116,7 +126,7 @@ namespace BrickBreaker
 
         private void BtnPlay_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException("Play");
+            DrawSelectLevel();
         }
 
         private void BtnSaveGame_Click(object sender, EventArgs e)
