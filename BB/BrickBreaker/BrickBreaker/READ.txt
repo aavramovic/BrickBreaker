@@ -1,1 +1,2 @@
-﻿
+﻿Ako moze vo prazniot prostor da mi stavish kontrola na koja sho ke mozam da i menuvam text na primer labela za da proveruvam vrednosti ili pak ako
+stavash tamu drugi raboti neka bide bash vo centar na ekran i taka moze

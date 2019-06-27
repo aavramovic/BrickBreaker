@@ -243,6 +243,7 @@ namespace BrickBreaker
                 SelectedLevel = Levels[(int)numLevel-1];
                 Controls.Clear();
 
+
                 this.MaximumSize = new Size(0, 0);
                 this.Size = FULLSCREEN_SIZE;
 
@@ -268,6 +269,12 @@ namespace BrickBreaker
         {
             if (SelectedLevel != null)
             {
+                //Testing Controls
+                if (e.KeyData == Keys.W)
+                    SelectedLevel.BallI.Velocity++;
+                if(e.KeyData == Keys.S)
+                    SelectedLevel.BallI.Velocity--;
+
                 SelectedLevel.MoveBouncer(sender, e);
                 Invalidate();
             }

@@ -8,16 +8,14 @@ namespace BrickBreaker
     public class Level
     {
         private List<Brick> BrickList { get; set; }
-        private Ball BallI { get; set; } // Ball Instance
+        public Ball BallI { get; set; } // Ball Instance
         private Bouncer BouncerI { get; set; } // Bouncer Instance
         private readonly Color BACKGROUND_COLOR = Color.Black;
         readonly Size FULLSCREEN_SIZE;
         private Rectangle Border;
         public static Random r = new Random();
 
-
-
-
+        
         public enum Direction
         {
             TOP,
@@ -39,7 +37,7 @@ namespace BrickBreaker
         public void Draw(Graphics g)
         {
             g.Clear(BACKGROUND_COLOR);
-
+            
             Pen pen = new Pen(Color.LightGray, 3);
             g.DrawRectangle(pen, Border);
             foreach (Brick brick in BrickList)
@@ -90,7 +88,9 @@ namespace BrickBreaker
 
             if (BouncerI.HitBox.IntersectsWith(BallI.HitBox))
             {
+                float modifier = BouncerI.Position.X + BouncerI.Width / 2 - BallI.Position.X;
                 BallI.velocityY = -BallI.velocityY;
+                BallI.velocityX = BallI.velocityX-modifier / BouncerI.Width;
             }
 
             if (BrickList.Count > 0)
@@ -98,7 +98,6 @@ namespace BrickBreaker
                 {
                     if (BallI.HitBox.IntersectsWith(b.HitBox))
                     {
-                        //Somehow ne vleguva voopshto vo ifovive
                         if (BallI.HitBox.Top <= b.HitBox.Bottom)
                         {
                             BallI.velocityY = -BallI.velocityY;
@@ -125,41 +124,27 @@ namespace BrickBreaker
                         break;
                     }
                 }
-        
+            int Padding = 3;
             if (BallI.HitBox.Top < Border.Top)
             {
                 BallI.velocityY = -BallI.velocityY ;
-                BallI.Position = new Point(BallI.Position.X, BallI.Position.Y +5);
+                BallI.Position = new Point(BallI.Position.X, BallI.Position.Y + Padding);
             }
             if (BallI.HitBox.Bottom > Border.Bottom)
             {
                 BallI.velocityY = -BallI.velocityY;
-                BallI.Position = new Point(BallI.Position.X, BallI.Position.Y - 5);
+                BallI.Position = new Point(BallI.Position.X, BallI.Position.Y - Padding);
             }
             if (BallI.HitBox.Left < Border.Left)
             {
                 BallI.velocityX = -BallI.velocityX;
-                BallI.Position = new Point(BallI.Position.X + 5, BallI.Position.Y);
+                BallI.Position = new Point(BallI.Position.X + Padding, BallI.Position.Y);
             }
             if (BallI.HitBox.Right > Border.Right)
             {
                 BallI.velocityX = -BallI.velocityX;
-                BallI.Position = new Point(BallI.Position.X - 5, BallI.Position.Y);
+                BallI.Position = new Point(BallI.Position.X - Padding, BallI.Position.Y);
             }
-            /*
-            if(BallI.HitBox.Top == LastY)
-            {
-                BallI.velocityY = (float)(r.NextDouble()>0.5?(-1)*r.NextDouble(): r.NextDouble());
-                LastY = BallI.HitBox.Top;
-            }
-            if (BallI.HitBox.Left == LastX)
-            {
-                BallI.velocityX = (float)(r.NextDouble() > 0.5 ? (-1) * r.NextDouble() : r.NextDouble());
-                MessageBox.Show(BallI.HitBox.Left.ToString());
-                LastX = BallI.HitBox.Left;
-
-            }
-            */
 
             /**
             * Za dolu ne se proveruva deka tamu ke se resetira ke stavime poseben metod sho ke odzema zivoti moze i gore srcenca sho 
