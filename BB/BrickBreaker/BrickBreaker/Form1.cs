@@ -27,24 +27,22 @@ namespace BrickBreaker
         private readonly int NUMBER_OF_LEVELS = 9;
         private readonly Size FULLSCREEN_SIZE;
         private readonly Size MENU_SIZE = new Size(900, 600);
+        private readonly int SPACE_FROM_TOP = 40;
 
-        private Random random= new Random();
+
+        private readonly Random random= new Random();
 
         public Form1()
         {
+            InitializeComponent();
+            DoubleBuffered = true;
             SetStyle(ControlStyles.ResizeRedraw, true);
             SetStyle(ControlStyles.UserPaint, true);
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-
-            InitializeComponent();
-            DoubleBuffered = true;
-
             FULLSCREEN_SIZE = Screen.FromControl(this).Bounds.Size;
-
             if(Levels == null)
                 CreateLevels();
-
             game = new Game();
             DrawMainMenu();
         }
@@ -66,8 +64,7 @@ namespace BrickBreaker
             int RandomH = random.Next(minHeight, maxHeight);
             int RandomW = random.Next(minWidth, maxWidth);
             int BrickWidth = (FULLSCREEN_SIZE.Width / RandomW);
-            int BrickHeight = FULLSCREEN_SIZE.Height / 4 / RandomH;
-            int SPACE_FROM_TOP = 40;
+            int BrickHeight = FULLSCREEN_SIZE.Height / 2 / RandomH;
             for (int i = 0; i < RandomH; i++)
             {
                 for(int j = 0; j< RandomW; j++)
@@ -84,20 +81,16 @@ namespace BrickBreaker
         {
             if(status == Status.PLAY)
             {
-                
                 e.Graphics.Clear(Color.Gray);
-                this.MaximumSize = new Size(0, 0);
-                this.Size = FULLSCREEN_SIZE;
-                this.WindowState = FormWindowState.Maximized;
                 SelectedLevel.Draw(e.Graphics);
-                this.BallTimer.Enabled = true;
-                SelectedLevel.MoveBall();// ne uspeav so tajmerot da go povrzam po nekoja pricina ama vaka top e
+                //this.BallTimer.Enabled = true;
+                SelectedLevel.MoveBall();
                 Invalidate();
             }
             else
             {
                 this.MaximumSize = MENU_SIZE;
-                this.BallTimer.Enabled = false;
+                //this.BallTimer.Enabled = false;
                 e.Graphics.DrawImageUnscaled(BrickBreaker.Properties.Resources.MenuBackgroundImage, 0, 0);
             }
         }
@@ -247,9 +240,22 @@ namespace BrickBreaker
             
             if (numLevel != null && numLevel<=NUMBER_OF_LEVELS && numLevel>=1)
             {
-                //SelectedLevel = new LevelForm(Levels[(int)numLevel]);
                 SelectedLevel = Levels[(int)numLevel-1];
                 Controls.Clear();
+
+                this.MaximumSize = new Size(0, 0);
+                this.Size = FULLSCREEN_SIZE;
+
+                this.WindowState = FormWindowState.Maximized;
+
+
+                /*Label stat = CreateLabel(0, 0, FULLSCREEN_SIZE.Width, SPACE_FROM_TOP, "-------------------", 20);
+                stat.ForeColor = Color.White;
+                stat.BackColor = Color.Orange;
+                Controls.Add(stat);
+                stat.Visible = true;
+                stat.BringToFront();*/
+
                 status = Status.PLAY;
             }
             else
@@ -263,15 +269,6 @@ namespace BrickBreaker
             if (SelectedLevel != null)
             {
                 SelectedLevel.MoveBouncer(sender, e);
-                Invalidate();
-            }
-        }
-
-        private void BallTimer_Tick(object sender, EventArgs e)
-        {
-            if (SelectedLevel != null)
-            {
-                SelectedLevel.MoveBall();
                 Invalidate();
             }
         }

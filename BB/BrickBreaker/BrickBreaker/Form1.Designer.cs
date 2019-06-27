@@ -28,9 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
-            this.BallTimer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // label1
@@ -43,11 +41,6 @@
             this.label1.Size = new System.Drawing.Size(231, 74);
             this.label1.TabIndex = 0;
             this.label1.Text = "Levels";
-            // 
-            // BallTimer
-            // 
-            this.BallTimer.Interval = 10;
-            this.BallTimer.Tick += new System.EventHandler(this.BallTimer_Tick);
             // 
             // Form1
             // 
@@ -71,7 +64,6 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Timer BallTimer;
     }
 }
 

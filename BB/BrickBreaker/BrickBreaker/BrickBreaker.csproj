@@ -95,5 +95,8 @@
   <ItemGroup>
     <None Include="Resources\MenuBackgroundImage.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="READ.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

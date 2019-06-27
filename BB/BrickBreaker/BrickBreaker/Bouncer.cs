@@ -24,7 +24,7 @@ namespace BrickBreaker
             Height = height;
             Position = position;
             Coloring = coloring;
-            Speed = 30;
+            Speed = 90;
             HitBox = new Rectangle(Position.X, Position.Y, Width, Height);
         }
 
@@ -32,10 +32,12 @@ namespace BrickBreaker
         {
             Brush brush = new SolidBrush(Coloring);
             g.FillRectangle(brush, Position.X, Position.Y, Width, Height);
+            brush.Dispose();
 
             //Testing Hitboxes
             Pen p = new Pen(Color.Red, 2);
             g.DrawRectangle(p, HitBox);
+            p.Dispose();
         }
 
         internal void MoveLeft()

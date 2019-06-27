@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -17,10 +13,11 @@ namespace BrickBreaker
         readonly Size FULLSCREEN_SIZE;
         private Rectangle Border;
 
+
         public enum Direction
         {
-            UP,
-            DOWN,
+            TOP,
+            BOTTOM,
             LEFT,
             RIGHT
         }
@@ -28,11 +25,11 @@ namespace BrickBreaker
         {
             FULLSCREEN_SIZE = fulscreen_size;
             BrickList = brickList;
-            BallI = new Ball(20, new Point((int)FULLSCREEN_SIZE.Width/2,FULLSCREEN_SIZE.Height-400), Color.Orange);
+            BallI = new Ball(20, new Point((int)FULLSCREEN_SIZE.Width / 2, FULLSCREEN_SIZE.Height - 400), Color.Orange);
             int BOUNCER_WIDTH = 180;
             int BOUNCER_POSITION = (int)FULLSCREEN_SIZE.Width / 2 - (int)(BOUNCER_WIDTH) / 2;
             BouncerI = new Bouncer(BOUNCER_WIDTH, 25, new Point(BOUNCER_POSITION, FULLSCREEN_SIZE.Height - 60), Color.White);
-            Border = new Rectangle(0,40,FULLSCREEN_SIZE.Width, FULLSCREEN_SIZE.Height-72);
+            Border = new Rectangle(0, 40, FULLSCREEN_SIZE.Width, FULLSCREEN_SIZE.Height - 72);
         }
 
         public void Draw(Graphics g)
@@ -41,7 +38,7 @@ namespace BrickBreaker
 
             Pen pen = new Pen(Color.LightGray, 3);
             g.DrawRectangle(pen, Border);
-            foreach(Brick brick in BrickList)
+            foreach (Brick brick in BrickList)
             {
                 brick.Draw(g);
             }
@@ -55,7 +52,7 @@ namespace BrickBreaker
         }
         public void AddBricks(List<Brick> b)
         {
-            foreach(Brick brick in b)
+            foreach (Brick brick in b)
             {
                 BrickList.Add(brick);
             }
@@ -63,12 +60,12 @@ namespace BrickBreaker
 
         public void MoveBouncer(object sender, KeyEventArgs e)
         {
-            if(e.KeyData == Keys.Left && BouncerI.Position.X > Border.Location.X)
+            if (e.KeyData == Keys.Left && BouncerI.Position.X > Border.Location.X)
             {
                 BouncerI.MoveLeft();
-                
+
             }
-            if(e.KeyData == Keys.Right && BouncerI.Position.X+BouncerI.Width < Border.Width)
+            if (e.KeyData == Keys.Right && BouncerI.Position.X + BouncerI.Width < Border.Width)
             {
                 BouncerI.MoveRight();
             }
@@ -76,41 +73,79 @@ namespace BrickBreaker
 
         public void MoveBall()
         {
-        if (CheckCollision())
-            {
-                //Tuka ke odi direction change spored centri sth sth i so ova ke se istestira dali e dobra mathot za dvizenjeto vo ball
-                BallI.Speed = BallI.Speed * (-1);
-            }
-            BallI.Move();  
+            CheckCollision();
         }
 
-        private bool CheckCollision()
+        private void CheckCollision()
         {
-            bool doesCollide = false;
             List<Brick> BricksLeft = new List<Brick>();
-            if (BallI.HitBox.IntersectsWith(BouncerI.HitBox))
-                doesCollide = true;
-            foreach(Brick b in BrickList)
-            {
-                //Dali e podobro ovde namesto da se stava pa vadi brick da ima dva ifa obratni sho ne go dodava ako intersecta valjda ne
-                BricksLeft.Add(b);
-                if (BallI.HitBox.IntersectsWith(b.HitBox))
-                {
+            double BallX = BallI.Position.X + BallI.velocityX;
+            double BallY = BallI.Position.Y + BallI.velocityY;
 
-                    doesCollide = true;
-                    BricksLeft.Remove(b);
-                }
+            foreach (Brick b in BrickList)
+                BricksLeft.Add(b);
+
+            if (BouncerI.HitBox.IntersectsWith(BallI.HitBox))
+            {
+                BallI.velocityY = -BallI.velocityY;
+                BallI.Position = new Point((int)(BallX + BallI.velocityX), (int)(BallY + BallI.velocityY));
+                BallI.HitBox = new Rectangle(BallI.Position.X - BallI.Radius, BallI.Position.Y - BallI.Radius, BallI.Radius * 2, BallI.Radius * 2);
             }
-            if (BallI.HitBox.Top < Border.Top || BallI.HitBox.Left < Border.Left || BallI.HitBox.Right > Border.Right)
-                doesCollide = true;
+
+            if (BrickList.Count > 0)
+                foreach (Brick b in BrickList)
+                {
+                    if (BallI.HitBox.IntersectsWith(b.HitBox))
+                    {
+                        if (BallI.HitBox.Top <= b.HitBox.Bottom || BallI.HitBox.Bottom >= b.HitBox.Top)
+                        {
+                            BallI.velocityY = -BallI.velocityY;
+                        }
+                        else if (BallI.HitBox.Left <= b.HitBox.Right || BallI.HitBox.Right >= b.HitBox.Left)
+                        {
+                            BallI.velocityX = -BallI.velocityX;
+                        }
+                        BallI.Position = new Point((int)(BallX + BallI.velocityX), (int)(BallY + BallI.velocityY));
+                        BallI.HitBox = new Rectangle(BallI.Position.X - BallI.Radius, BallI.Position.Y - BallI.Radius, BallI.Radius * 2, BallI.Radius * 2);
+                        if (b.Lives == 1)
+                            BricksLeft.Remove(b);
+                        b.Lives -= 1;
+                        break;
+                    }
+                }
+
+            
+
+
+            if (BallY-BallI.Radius <= Border.Top)
+            {
+                BallI.velocityY = -BallI.velocityY;
+            }
+            if (BallY + BallI.Radius >= Border.Bottom)
+            {
+                BallI.velocityY = -BallI.velocityY;
+            }
+            if (BallX - BallI.Radius <= Border.Left)
+            {
+                BallI.velocityX = -BallI.velocityX;
+            }
+            if (BallX+ BallI.Radius >= Border.Right)
+            {
+                BallI.velocityX = -BallI.velocityX;
+            }
+
+            BallI.Position = new Point((int)(BallX + BallI.velocityX), (int)(BallY + BallI.velocityY));
+            BallI.HitBox = new Rectangle(BallI.Position.X - BallI.Radius, BallI.Position.Y - BallI.Radius, BallI.Radius * 2, BallI.Radius * 2);
 
             /**
             * Za dolu ne se proveruva deka tamu ke se resetira ke stavime poseben metod sho ke odzema zivoti moze i gore srcenca sho 
             * gi snemuva 
             * Ima bug ako vlezesh so bouncerot vo topceto kako sho pagja od strana go cuva vo mesto
             */
+
             BrickList = BricksLeft;
-            return doesCollide;
+
+            BallI.Move();
         }
     }
 }
