@@ -19,10 +19,11 @@ namespace BrickBreaker
     {
         private Game game;
         private Status status;
-        //private string fileName;
+        //private string fileName; 
         private List<Level> Levels;
         private Level SelectedLevel;
 
+        //Constants (Секаде каде што треба да се користат се направени за само тука да се смени)
         private readonly int NUMBER_OF_LEVELS = 9;
         private readonly Size FULLSCREEN_SIZE;
         private readonly Size MENU_SIZE = new Size(900, 600);
@@ -51,9 +52,11 @@ namespace BrickBreaker
         private void CreateLevels()
         {
             Levels = new List<Level>();
+
+            int k = 4;
             for(int i = 1; i<=NUMBER_OF_LEVELS; i++)
             {
-                Levels.Add(GenerateRandomLevel(i * 10, i * 10, i * 10, i * 10));
+                Levels.Add(GenerateRandomLevel(i * k, i * k, i * k, i * k));
             }
         }
         
@@ -88,7 +91,7 @@ namespace BrickBreaker
                 this.WindowState = FormWindowState.Maximized;
                 SelectedLevel.Draw(e.Graphics);
                 this.BallTimer.Enabled = true;
-                SelectedLevel.MoveBall();
+                SelectedLevel.MoveBall();// ne uspeav so tajmerot da go povrzam po nekoja pricina ama vaka top e
                 Invalidate();
             }
             else

@@ -96,12 +96,19 @@ namespace BrickBreaker
                 BricksLeft.Add(b);
                 if (BallI.HitBox.IntersectsWith(b.HitBox))
                 {
+
                     doesCollide = true;
                     BricksLeft.Remove(b);
                 }
             }
             if (BallI.HitBox.Top < Border.Top || BallI.HitBox.Left < Border.Left || BallI.HitBox.Right > Border.Right)
                 doesCollide = true;
+
+            /**
+            * Za dolu ne se proveruva deka tamu ke se resetira ke stavime poseben metod sho ke odzema zivoti moze i gore srcenca sho 
+            * gi snemuva 
+            * Ima bug ako vlezesh so bouncerot vo topceto kako sho pagja od strana go cuva vo mesto
+            */
             BrickList = BricksLeft;
             return doesCollide;
         }
