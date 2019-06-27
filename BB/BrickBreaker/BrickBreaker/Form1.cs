@@ -271,9 +271,9 @@ namespace BrickBreaker
             {
                 //Testing Controls
                 if (e.KeyData == Keys.W)
-                    SelectedLevel.BallI.Velocity++;
-                if(e.KeyData == Keys.S)
-                    SelectedLevel.BallI.Velocity--;
+                    SelectedLevel.BallI.ChangeSpeed(0.1);
+                if (e.KeyData == Keys.S)
+                    SelectedLevel.BallI.ChangeSpeed(-0.1);
 
                 SelectedLevel.MoveBouncer(sender, e);
                 Invalidate();

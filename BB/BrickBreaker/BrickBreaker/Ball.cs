@@ -34,6 +34,11 @@ namespace BrickBreaker
 
             HitBox = new Rectangle(Position.X - Radius, Position.Y - Radius, Radius * 2, Radius * 2);
         }
+
+        public void ChangeSpeed(double x)
+        {
+            velocityY += (float)x;
+        }
         public void Draw(Graphics g)
         {
             Brush brush = new SolidBrush(Color.White);
