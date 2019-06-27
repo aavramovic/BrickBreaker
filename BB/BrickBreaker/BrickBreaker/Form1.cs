@@ -20,24 +20,77 @@ namespace BrickBreaker
         private Game game;
         private Status status;
         //private string fileName;
-       
+        private List<Level> Levels;
+        private Level SelectedLevel;
+
+        private readonly int NUMBER_OF_LEVELS = 9;
+        private readonly Size FULLSCREEN_SIZE;
+        private readonly Size MENU_SIZE = new Size(900, 600);
+
+        private Random random= new Random();
+
         public Form1()
         {
+            SetStyle(ControlStyles.ResizeRedraw, true);
+            SetStyle(ControlStyles.UserPaint, true);
+            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+
             InitializeComponent();
             DoubleBuffered = true;
 
+            FULLSCREEN_SIZE = Screen.FromControl(this).Bounds.Size;
+
+            if(Levels == null)
+                CreateLevels();
+
             game = new Game();
             DrawMainMenu();
+        }
+
+        private void CreateLevels()
+        {
+            Levels = new List<Level>();
+            for(int i = 0; i<NUMBER_OF_LEVELS; i++)
+            {
+                Levels.Add(GenerateRandomLevel());
+            }
+        }
+        
+        private Level GenerateRandomLevel()
+        {
+            List<Brick> BrickList = new List<Brick>();
+            int RandomH = random.Next(6, 8);
+            int RandomW = random.Next(16, 32);
+            int BrickWidth = (FULLSCREEN_SIZE.Width / RandomW);
+            int BrickHeight = FULLSCREEN_SIZE.Height / 4 / RandomH;
+            int SPACE_FROM_TOP = 40;
+            for (int i = 0; i < RandomH; i++)
+            {
+                for(int j = 0; j< RandomW; j++)
+                {
+                    Point brickPoint = new Point(BrickWidth * j + FULLSCREEN_SIZE.Width%RandomW/2, BrickHeight * i+SPACE_FROM_TOP);
+                    Brick brick = new Brick(BrickWidth, BrickHeight, brickPoint, Color.FromArgb(random.Next(255), random.Next(255), random.Next(255)), 3);
+                    BrickList.Add(brick);
+                }
+            }
+            return new Level(BrickList, FULLSCREEN_SIZE);
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
             if(status == Status.PLAY)
             {
-
+                e.Graphics.Clear(Color.Gray);
+                this.MaximumSize = new Size(0, 0);
+                this.Size = FULLSCREEN_SIZE;
+                this.WindowState = FormWindowState.Maximized;
+                SelectedLevel.Draw(e.Graphics);
+                Invalidate();
             }
             else
             {
+                this.MaximumSize = MENU_SIZE;
                 e.Graphics.DrawImageUnscaled(BrickBreaker.Properties.Resources.MenuBackgroundImage, 0, 0);
             }
         }
@@ -103,7 +156,7 @@ namespace BrickBreaker
             Label labelBricksBreaker = CreateLabel(235, 20, 231, 74, "Levels", 36);
             Controls.Add(labelBricksBreaker);
 
-            for (int i = 1; i <= 9; i++)
+            for (int i = 1; i <= NUMBER_OF_LEVELS; i++)
             {
                 int dx = ((i - 1) % 3) * 160;
                 int dy = ((i - 1) / 3) * 110;
@@ -184,9 +237,35 @@ namespace BrickBreaker
         private void BtnLevel_Click(object sender, EventArgs e)
         {
             int? numLevel = (((Control)sender).Tag as int?);
-            MessageBox.Show(numLevel.ToString());   //just a test.
+            
+            if (numLevel != null && numLevel<=NUMBER_OF_LEVELS && numLevel>=1)
+            {
+                //SelectedLevel = new LevelForm(Levels[(int)numLevel]);
+                SelectedLevel = Levels[(int)numLevel];
+                Controls.Clear();
+                status = Status.PLAY;
+            }
+            else
+            {
+                MessageBox.Show("Invalid Level Selection");
+            }
+        }
 
-            throw new NotImplementedException("NOT IMPLEMENTED");
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (SelectedLevel != null)
+            {
+                SelectedLevel.MoveBouncer(sender, e);
+                Invalidate();
+            }
+        }
+
+        private void Timer1_Tick(object sender, EventArgs e)
+        {
+            if (SelectedLevel != null)
+            {
+                SelectedLevel.MoveBall();
+            }
         }
     }
 }

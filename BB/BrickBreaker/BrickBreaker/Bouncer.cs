@@ -9,11 +9,13 @@ namespace BrickBreaker
 {
     public class Bouncer
     {
+
         public float Width { get; set; }
-        public float Height { get; set; }
+        float Height { get; set; }
         public Point Position { get; set; }
-        public Color Coloring { get; set; }
-        public double Speed { get; set; }
+        Color Coloring { get; set; }
+        public int Speed { get; set; }
+
 
         public Bouncer(float width, float height, Point position, Color coloring)
         {
@@ -21,6 +23,7 @@ namespace BrickBreaker
             Height = height;
             Position = position;
             Coloring = coloring;
+            Speed = 30;
         }
 
         public void Draw(Graphics g)

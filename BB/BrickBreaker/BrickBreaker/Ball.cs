@@ -12,8 +12,8 @@ namespace BrickBreaker
         public float Radius { get; set; }
         public Point Position { get; set; }
         public Color Coloring { get; set; }
-        //Optional
         public double Speed { get; set; }
+        public int DirectionAngle { get; set; }
 
         
         public Ball(float radius, Point position, Color coloring)
@@ -23,7 +23,8 @@ namespace BrickBreaker
             Coloring = coloring;
             //TODO: add speed to constructor once the move method is implemented
             // or maybe even make it a static speed
-            Speed = 0;
+            Speed = 1;
+            DirectionAngle = 180;
         }
         public void Draw(Graphics g)
         {
