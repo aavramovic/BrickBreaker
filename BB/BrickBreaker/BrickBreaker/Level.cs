@@ -11,8 +11,8 @@ namespace BrickBreaker
     public class Level
     {
         private List<Brick> BrickList { get; set; }
-        private Ball BallInstance { get; set; }
-        private Bouncer BouncerInstance { get; set; }
+        private Ball BallI { get; set; } // Ball Instance
+        private Bouncer BouncerI { get; set; } // Bouncer Instance
         private readonly Color BACKGROUND_COLOR = Color.Black;
         readonly Size FULLSCREEN_SIZE;
         private Rectangle Border;
@@ -28,10 +28,10 @@ namespace BrickBreaker
         {
             FULLSCREEN_SIZE = fulscreen_size;
             BrickList = brickList;
-            BallInstance = new Ball(20, new Point((int)FULLSCREEN_SIZE.Width/2,FULLSCREEN_SIZE.Height-400), Color.Orange);
+            BallI = new Ball(20, new Point((int)FULLSCREEN_SIZE.Width/2,FULLSCREEN_SIZE.Height-400), Color.Orange);
             int BOUNCER_WIDTH = 180;
             int BOUNCER_POSITION = (int)FULLSCREEN_SIZE.Width / 2 - (int)(BOUNCER_WIDTH) / 2;
-            BouncerInstance = new Bouncer(BOUNCER_WIDTH, 25, new Point(BOUNCER_POSITION, FULLSCREEN_SIZE.Height - 60), Color.White);
+            BouncerI = new Bouncer(BOUNCER_WIDTH, 25, new Point(BOUNCER_POSITION, FULLSCREEN_SIZE.Height - 60), Color.White);
             Border = new Rectangle(0,40,FULLSCREEN_SIZE.Width, FULLSCREEN_SIZE.Height-72);
         }
 
@@ -45,8 +45,8 @@ namespace BrickBreaker
             {
                 brick.Draw(g);
             }
-            BallInstance.Draw(g);
-            BouncerInstance.Draw(g);
+            BallI.Draw(g);
+            BouncerI.Draw(g);
         }
 
         public void AddBrick(Brick b)
@@ -63,19 +63,47 @@ namespace BrickBreaker
 
         public void MoveBouncer(object sender, KeyEventArgs e)
         {
-            if(e.KeyData == Keys.Left && BouncerInstance.Position.X > Border.Location.X)
-            {              
-                BouncerInstance.Position = new Point(BouncerInstance.Position.X - BouncerInstance.Speed, BouncerInstance.Position.Y);
-            }
-            if(e.KeyData == Keys.Right && BouncerInstance.Position.X+BouncerInstance.Width < Border.Width)
+            if(e.KeyData == Keys.Left && BouncerI.Position.X > Border.Location.X)
             {
-                BouncerInstance.Position = new Point(BouncerInstance.Position.X + BouncerInstance.Speed, BouncerInstance.Position.Y);
+                BouncerI.MoveLeft();
+                
+            }
+            if(e.KeyData == Keys.Right && BouncerI.Position.X+BouncerI.Width < Border.Width)
+            {
+                BouncerI.MoveRight();
             }
         }
 
         public void MoveBall()
         {
-            //BallInstance.Position = 
+        if (CheckCollision())
+            {
+                //Tuka ke odi direction change spored centri sth sth i so ova ke se istestira dali e dobra mathot za dvizenjeto vo ball
+                BallI.Speed = BallI.Speed * (-1);
+            }
+            BallI.Move();  
+        }
+
+        private bool CheckCollision()
+        {
+            bool doesCollide = false;
+            List<Brick> BricksLeft = new List<Brick>();
+            if (BallI.HitBox.IntersectsWith(BouncerI.HitBox))
+                doesCollide = true;
+            foreach(Brick b in BrickList)
+            {
+                //Dali e podobro ovde namesto da se stava pa vadi brick da ima dva ifa obratni sho ne go dodava ako intersecta valjda ne
+                BricksLeft.Add(b);
+                if (BallI.HitBox.IntersectsWith(b.HitBox))
+                {
+                    doesCollide = true;
+                    BricksLeft.Remove(b);
+                }
+            }
+            if (BallI.HitBox.Top < Border.Top || BallI.HitBox.Left < Border.Left || BallI.HitBox.Right > Border.Right)
+                doesCollide = true;
+            BrickList = BricksLeft;
+            return doesCollide;
         }
     }
 }

@@ -10,26 +10,49 @@ namespace BrickBreaker
     public class Bouncer
     {
 
-        public float Width { get; set; }
-        float Height { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
         public Point Position { get; set; }
         Color Coloring { get; set; }
         public int Speed { get; set; }
+        public Rectangle HitBox { get; set; }
 
 
-        public Bouncer(float width, float height, Point position, Color coloring)
+        public Bouncer(int width, int height, Point position, Color coloring)
         {
             Width = width;
             Height = height;
             Position = position;
             Coloring = coloring;
             Speed = 30;
+            HitBox = new Rectangle(Position.X, Position.Y, Width, Height);
         }
 
         public void Draw(Graphics g)
         {
             Brush brush = new SolidBrush(Coloring);
             g.FillRectangle(brush, Position.X, Position.Y, Width, Height);
+
+            //Testing Hitboxes
+            Pen p = new Pen(Color.Red, 2);
+            g.DrawRectangle(p, HitBox);
+        }
+
+        internal void MoveLeft()
+        {
+            Position = new Point(Position.X - Speed, Position.Y);
+            MoveHitBox();
+        }
+
+        internal void MoveRight()
+        {
+            Position = new Point(Position.X + Speed, Position.Y);
+            MoveHitBox();
+        }
+
+        private void MoveHitBox()
+        {
+            HitBox = new Rectangle(Position.X, Position.Y, Width, Height);
         }
     }
 }

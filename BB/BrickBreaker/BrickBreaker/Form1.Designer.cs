@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.BallTimer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // label1
@@ -44,11 +44,10 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Levels";
             // 
-            // timer1
+            // BallTimer
             // 
-            this.timer1.Enabled = true;
-            this.timer1.Interval = 10;
-            this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
+            this.BallTimer.Interval = 10;
+            this.BallTimer.Tick += new System.EventHandler(this.BallTimer_Tick);
             // 
             // Form1
             // 
@@ -72,7 +71,7 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer BallTimer;
     }
 }
 

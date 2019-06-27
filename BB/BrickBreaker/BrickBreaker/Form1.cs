@@ -51,17 +51,17 @@ namespace BrickBreaker
         private void CreateLevels()
         {
             Levels = new List<Level>();
-            for(int i = 0; i<NUMBER_OF_LEVELS; i++)
+            for(int i = 1; i<=NUMBER_OF_LEVELS; i++)
             {
-                Levels.Add(GenerateRandomLevel());
+                Levels.Add(GenerateRandomLevel(i * 10, i * 10, i * 10, i * 10));
             }
         }
         
-        private Level GenerateRandomLevel()
+        private Level GenerateRandomLevel(int minHeight, int maxHeight, int minWidth, int maxWidth)
         {
             List<Brick> BrickList = new List<Brick>();
-            int RandomH = random.Next(6, 8);
-            int RandomW = random.Next(16, 32);
+            int RandomH = random.Next(minHeight, maxHeight);
+            int RandomW = random.Next(minWidth, maxWidth);
             int BrickWidth = (FULLSCREEN_SIZE.Width / RandomW);
             int BrickHeight = FULLSCREEN_SIZE.Height / 4 / RandomH;
             int SPACE_FROM_TOP = 40;
@@ -81,16 +81,20 @@ namespace BrickBreaker
         {
             if(status == Status.PLAY)
             {
+                
                 e.Graphics.Clear(Color.Gray);
                 this.MaximumSize = new Size(0, 0);
                 this.Size = FULLSCREEN_SIZE;
                 this.WindowState = FormWindowState.Maximized;
                 SelectedLevel.Draw(e.Graphics);
+                this.BallTimer.Enabled = true;
+                SelectedLevel.MoveBall();
                 Invalidate();
             }
             else
             {
                 this.MaximumSize = MENU_SIZE;
+                this.BallTimer.Enabled = false;
                 e.Graphics.DrawImageUnscaled(BrickBreaker.Properties.Resources.MenuBackgroundImage, 0, 0);
             }
         }
@@ -241,7 +245,7 @@ namespace BrickBreaker
             if (numLevel != null && numLevel<=NUMBER_OF_LEVELS && numLevel>=1)
             {
                 //SelectedLevel = new LevelForm(Levels[(int)numLevel]);
-                SelectedLevel = Levels[(int)numLevel];
+                SelectedLevel = Levels[(int)numLevel-1];
                 Controls.Clear();
                 status = Status.PLAY;
             }
@@ -260,11 +264,12 @@ namespace BrickBreaker
             }
         }
 
-        private void Timer1_Tick(object sender, EventArgs e)
+        private void BallTimer_Tick(object sender, EventArgs e)
         {
             if (SelectedLevel != null)
             {
                 SelectedLevel.MoveBall();
+                Invalidate();
             }
         }
     }
