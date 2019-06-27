@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -12,6 +13,9 @@ namespace BrickBreaker
         private readonly Color BACKGROUND_COLOR = Color.Black;
         readonly Size FULLSCREEN_SIZE;
         private Rectangle Border;
+        public static Random r = new Random();
+
+
 
 
         public enum Direction
@@ -94,23 +98,23 @@ namespace BrickBreaker
                 {
                     if (BallI.HitBox.IntersectsWith(b.HitBox))
                     {
+                        //Somehow ne vleguva voopshto vo ifovive
                         if (BallI.HitBox.Top <= b.HitBox.Bottom)
                         {
                             BallI.velocityY = -BallI.velocityY;
-                            BallI.Position = new Point(BallI.Position.X, BallI.Position.Y + 2);
+                            BallI.Position = new Point(BallI.Position.X, BallI.Position.Y + 5);
                         }
-                        if (BallI.HitBox.Bottom >= b.HitBox.Top)
+                        if (BallI.HitBox.Bottom <= b.HitBox.Top)
                         {
                             BallI.velocityY = -BallI.velocityY;
-                            BallI.Position = new Point(BallI.Position.X, BallI.Position.Y - 2);
+                            BallI.Position = new Point(BallI.Position.X, BallI.Position.Y - 5);
                         }
-                        if (BallI.HitBox.Left <= b.HitBox.Right)
+                        if (BallI.HitBox.Left >= b.HitBox.Right)
                         {
                             BallI.velocityX = -BallI.velocityX;
                             BallI.Position = new Point(BallI.Position.X + 2, BallI.Position.Y);
-
                         }
-                        if (BallI.HitBox.Right >= b.HitBox.Left)
+                        if (BallI.HitBox.Right <= b.HitBox.Left)
                         {
                             BallI.velocityX = -BallI.velocityX;
                             BallI.Position = new Point(BallI.Position.X - 2, BallI.Position.Y);
@@ -121,28 +125,41 @@ namespace BrickBreaker
                         break;
                     }
                 }
-
+        
             if (BallI.HitBox.Top < Border.Top)
             {
-                BallI.velocityY = -BallI.velocityY;
-                BallI.Position = new Point(BallI.Position.X, BallI.Position.Y + 2);
+                BallI.velocityY = -BallI.velocityY ;
+                BallI.Position = new Point(BallI.Position.X, BallI.Position.Y +5);
             }
             if (BallI.HitBox.Bottom > Border.Bottom)
             {
                 BallI.velocityY = -BallI.velocityY;
-                BallI.Position = new Point(BallI.Position.X, BallI.Position.Y - 2);
+                BallI.Position = new Point(BallI.Position.X, BallI.Position.Y - 5);
             }
             if (BallI.HitBox.Left < Border.Left)
             {
                 BallI.velocityX = -BallI.velocityX;
-                BallI.Position = new Point(BallI.Position.X + 2, BallI.Position.Y);
+                BallI.Position = new Point(BallI.Position.X + 5, BallI.Position.Y);
             }
             if (BallI.HitBox.Right > Border.Right)
             {
                 BallI.velocityX = -BallI.velocityX;
-                BallI.Position = new Point(BallI.Position.X - 2, BallI.Position.Y);
+                BallI.Position = new Point(BallI.Position.X - 5, BallI.Position.Y);
             }
+            /*
+            if(BallI.HitBox.Top == LastY)
+            {
+                BallI.velocityY = (float)(r.NextDouble()>0.5?(-1)*r.NextDouble(): r.NextDouble());
+                LastY = BallI.HitBox.Top;
+            }
+            if (BallI.HitBox.Left == LastX)
+            {
+                BallI.velocityX = (float)(r.NextDouble() > 0.5 ? (-1) * r.NextDouble() : r.NextDouble());
+                MessageBox.Show(BallI.HitBox.Left.ToString());
+                LastX = BallI.HitBox.Left;
 
+            }
+            */
 
             /**
             * Za dolu ne se proveruva deka tamu ke se resetira ke stavime poseben metod sho ke odzema zivoti moze i gore srcenca sho 

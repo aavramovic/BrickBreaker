@@ -31,8 +31,9 @@ namespace BrickBreaker
             Brush brush = new SolidBrush(Coloring);
             g.FillRectangle(brush, Position.X, Position.Y, Width, Height);
             //Testing Hitboxes
-            //Pen p = new Pen(Color.Red, 2);
-            //g.DrawRectangle(p, HitBox);
+            Pen p = new Pen(Color.Red, 2);
+            g.DrawRectangle(p, HitBox);
+            p.Dispose();
         }
     }
 }
