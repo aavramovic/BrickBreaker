@@ -79,8 +79,7 @@ namespace BrickBreaker
         private void CheckCollision()
         {
             List<Brick> BricksLeft = new List<Brick>();
-            double BallX = BallI.Position.X + BallI.velocityX;
-            double BallY = BallI.Position.Y + BallI.velocityY;
+
 
             foreach (Brick b in BrickList)
                 BricksLeft.Add(b);
@@ -88,8 +87,6 @@ namespace BrickBreaker
             if (BouncerI.HitBox.IntersectsWith(BallI.HitBox))
             {
                 BallI.velocityY = -BallI.velocityY;
-                BallI.Position = new Point((int)(BallX + BallI.velocityX), (int)(BallY + BallI.velocityY));
-                BallI.HitBox = new Rectangle(BallI.Position.X - BallI.Radius, BallI.Position.Y - BallI.Radius, BallI.Radius * 2, BallI.Radius * 2);
             }
 
             if (BrickList.Count > 0)
@@ -97,16 +94,27 @@ namespace BrickBreaker
                 {
                     if (BallI.HitBox.IntersectsWith(b.HitBox))
                     {
-                        if (BallI.HitBox.Top <= b.HitBox.Bottom || BallI.HitBox.Bottom >= b.HitBox.Top)
+                        if (BallI.HitBox.Top <= b.HitBox.Bottom)
                         {
                             BallI.velocityY = -BallI.velocityY;
+                            BallI.Position = new Point(BallI.Position.X, BallI.Position.Y + 2);
                         }
-                        else if (BallI.HitBox.Left <= b.HitBox.Right || BallI.HitBox.Right >= b.HitBox.Left)
+                        if (BallI.HitBox.Bottom >= b.HitBox.Top)
+                        {
+                            BallI.velocityY = -BallI.velocityY;
+                            BallI.Position = new Point(BallI.Position.X, BallI.Position.Y - 2);
+                        }
+                        if (BallI.HitBox.Left <= b.HitBox.Right)
                         {
                             BallI.velocityX = -BallI.velocityX;
+                            BallI.Position = new Point(BallI.Position.X + 2, BallI.Position.Y);
+
                         }
-                        BallI.Position = new Point((int)(BallX + BallI.velocityX), (int)(BallY + BallI.velocityY));
-                        BallI.HitBox = new Rectangle(BallI.Position.X - BallI.Radius, BallI.Position.Y - BallI.Radius, BallI.Radius * 2, BallI.Radius * 2);
+                        if (BallI.HitBox.Right >= b.HitBox.Left)
+                        {
+                            BallI.velocityX = -BallI.velocityX;
+                            BallI.Position = new Point(BallI.Position.X - 2, BallI.Position.Y);
+                        }
                         if (b.Lives == 1)
                             BricksLeft.Remove(b);
                         b.Lives -= 1;
@@ -114,28 +122,27 @@ namespace BrickBreaker
                     }
                 }
 
-            
-
-
-            if (BallY-BallI.Radius <= Border.Top)
+            if (BallI.HitBox.Top < Border.Top)
             {
                 BallI.velocityY = -BallI.velocityY;
+                BallI.Position = new Point(BallI.Position.X, BallI.Position.Y + 2);
             }
-            if (BallY + BallI.Radius >= Border.Bottom)
+            if (BallI.HitBox.Bottom > Border.Bottom)
             {
                 BallI.velocityY = -BallI.velocityY;
+                BallI.Position = new Point(BallI.Position.X, BallI.Position.Y - 2);
             }
-            if (BallX - BallI.Radius <= Border.Left)
+            if (BallI.HitBox.Left < Border.Left)
             {
                 BallI.velocityX = -BallI.velocityX;
+                BallI.Position = new Point(BallI.Position.X + 2, BallI.Position.Y);
             }
-            if (BallX+ BallI.Radius >= Border.Right)
+            if (BallI.HitBox.Right > Border.Right)
             {
                 BallI.velocityX = -BallI.velocityX;
+                BallI.Position = new Point(BallI.Position.X - 2, BallI.Position.Y);
             }
 
-            BallI.Position = new Point((int)(BallX + BallI.velocityX), (int)(BallY + BallI.velocityY));
-            BallI.HitBox = new Rectangle(BallI.Position.X - BallI.Radius, BallI.Position.Y - BallI.Radius, BallI.Radius * 2, BallI.Radius * 2);
 
             /**
             * Za dolu ne se proveruva deka tamu ke se resetira ke stavime poseben metod sho ke odzema zivoti moze i gore srcenca sho 

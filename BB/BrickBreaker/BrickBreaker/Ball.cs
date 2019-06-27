@@ -13,6 +13,8 @@ namespace BrickBreaker
         public double Angle { get; set; }
         private double StartingDouble { get; set; }
 
+        public static Random r = new Random();
+
         public float velocityX;
         public float velocityY;
 
@@ -25,7 +27,6 @@ namespace BrickBreaker
             Position = position;
             Coloring = coloring;
             Velocity = 1;
-            Random r = new Random();
             StartingDouble = r.NextDouble();
             Angle = StartingDouble*2* Math.PI;
             velocityX = (float)(Math.Cos(Angle) * Velocity);
@@ -46,13 +47,11 @@ namespace BrickBreaker
         }
         public void Move()
         {
-
-            /*double BallX = Position.X + velocityX;
+            double BallX = Position.X + velocityX;
             double BallY = Position.Y + velocityY;
 
-
-            Position = new Point((int)(BallX+velocityX), (int)(BallY+velocityY));
-            HitBox = new Rectangle(Position.X - Radius, Position.Y - Radius, Radius * 2, Radius * 2);*/
+            Position = new Point((int)(BallX + velocityX), (int)(BallY + velocityY));
+            HitBox = new Rectangle(Position.X - Radius, Position.Y - Radius, Radius * 2, Radius * 2);
         }
     }
 }

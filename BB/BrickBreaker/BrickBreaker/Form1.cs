@@ -64,7 +64,7 @@ namespace BrickBreaker
             int RandomH = random.Next(minHeight, maxHeight);
             int RandomW = random.Next(minWidth, maxWidth);
             int BrickWidth = (FULLSCREEN_SIZE.Width / RandomW);
-            int BrickHeight = FULLSCREEN_SIZE.Height / 2 / RandomH;
+            int BrickHeight = FULLSCREEN_SIZE.Height / 4 / RandomH;
             for (int i = 0; i < RandomH; i++)
             {
                 for(int j = 0; j< RandomW; j++)
