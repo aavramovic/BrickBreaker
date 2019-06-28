@@ -82,7 +82,19 @@ namespace BrickBreaker
             if(status == Status.PLAY)
             {
                 e.Graphics.Clear(Color.Gray);
+                FontFamily fontFamily = new FontFamily("Arial");
+                Font font = new Font(
+                   fontFamily,
+                   16,
+                   FontStyle.Regular,
+                   GraphicsUnit.Pixel);
+                Brush b = new SolidBrush(Color.White);
                 SelectedLevel.Draw(e.Graphics);
+
+                String message = String.Format("{0} - {1}", SelectedLevel.BallI.velocityX.ToString(), SelectedLevel.BallI.Position.ToString());
+
+
+                e.Graphics.DrawString(message, font, b, 0, 0);
                 //this.BallTimer.Enabled = true;
                 SelectedLevel.MoveBall();
                 Invalidate();
@@ -248,15 +260,7 @@ namespace BrickBreaker
                 this.Size = FULLSCREEN_SIZE;
 
                 this.WindowState = FormWindowState.Maximized;
-
-
-                /*Label stat = CreateLabel(0, 0, FULLSCREEN_SIZE.Width, SPACE_FROM_TOP, "-------------------", 20);
-                stat.ForeColor = Color.White;
-                stat.BackColor = Color.Orange;
-                Controls.Add(stat);
-                stat.Visible = true;
-                stat.BringToFront();*/
-
+            
                 status = Status.PLAY;
             }
             else
@@ -271,10 +275,13 @@ namespace BrickBreaker
             {
                 //Testing Controls
                 if (e.KeyData == Keys.W)
-                    SelectedLevel.BallI.ChangeSpeed(0.1);
+                    SelectedLevel.BallI.ChangeSpeedY(0.1);
                 if (e.KeyData == Keys.S)
-                    SelectedLevel.BallI.ChangeSpeed(-0.1);
-
+                    SelectedLevel.BallI.ChangeSpeedY(-0.1);
+                if (e.KeyData == Keys.A)
+                    SelectedLevel.BallI.ChangeSpeedX(-0.1);
+                if (e.KeyData == Keys.D)
+                    SelectedLevel.BallI.ChangeSpeedX(0.1);
                 SelectedLevel.MoveBouncer(sender, e);
                 Invalidate();
             }

@@ -37,7 +37,6 @@ namespace BrickBreaker
         public void Draw(Graphics g)
         {
             g.Clear(BACKGROUND_COLOR);
-            
             Pen pen = new Pen(Color.LightGray, 3);
             g.DrawRectangle(pen, Border);
             foreach (Brick brick in BrickList)
@@ -85,7 +84,7 @@ namespace BrickBreaker
 
             foreach (Brick b in BrickList)
                 BricksLeft.Add(b);
-
+            
             if (BouncerI.HitBox.IntersectsWith(BallI.HitBox))
             {
                 float modifier = BouncerI.Position.X + BouncerI.Width / 2 - BallI.Position.X;
@@ -145,6 +144,8 @@ namespace BrickBreaker
                 BallI.velocityX = -BallI.velocityX;
                 BallI.Position = new Point(BallI.Position.X - Padding, BallI.Position.Y);
             }
+            if (BallI.Position.X == 22)
+                BallI.velocityX = 0.55F;
 
             /**
             * Za dolu ne se proveruva deka tamu ke se resetira ke stavime poseben metod sho ke odzema zivoti moze i gore srcenca sho 
