@@ -24,7 +24,7 @@ namespace BrickBreaker
             Height = height;
             Position = position;
             Coloring = coloring;
-            Speed = 90;
+            Speed = 87;
             HitBox = new Rectangle(Position.X, Position.Y, Width, Height);
         }
 

@@ -15,7 +15,7 @@ namespace BrickBreaker
         MENU,
         PLAY
     }
-    public partial class Form1 : Form
+    public partial class BrickForm : Form
     {
         private Game game;
         private Status status;
@@ -32,7 +32,7 @@ namespace BrickBreaker
 
         private readonly Random random= new Random();
 
-        public Form1()
+        public BrickForm()
         {
             InitializeComponent();
             DoubleBuffered = true;
@@ -81,7 +81,6 @@ namespace BrickBreaker
         {
             if(status == Status.PLAY)
             {
-                e.Graphics.Clear(Color.Gray);
                 FontFamily fontFamily = new FontFamily("Arial");
                 Font font = new Font(
                    fontFamily,
@@ -95,14 +94,12 @@ namespace BrickBreaker
 
 
                 e.Graphics.DrawString(message, font, b, 0, 0);
-                //this.BallTimer.Enabled = true;
-                SelectedLevel.MoveBall();
+                SelectedLevel.MoveBall(e.Graphics);
                 Invalidate();
             }
             else
             {
                 this.MaximumSize = MENU_SIZE;
-                //this.BallTimer.Enabled = false;
                 e.Graphics.DrawImageUnscaled(BrickBreaker.Properties.Resources.MenuBackgroundImage, 0, 0);
             }
         }
@@ -254,13 +251,17 @@ namespace BrickBreaker
             {
                 SelectedLevel = Levels[(int)numLevel-1];
                 Controls.Clear();
-
+                //Stavi vo konstruktor
+                SelectedLevel.f1 = this;
+                SelectedLevel.DeathLabel = DeathLabel;//
 
                 this.MaximumSize = new Size(0, 0);
                 this.Size = FULLSCREEN_SIZE;
 
                 this.WindowState = FormWindowState.Maximized;
-            
+
+                //ne menja nisho
+                //this.BackColor = Color.Black;//
                 status = Status.PLAY;
             }
             else
@@ -281,7 +282,8 @@ namespace BrickBreaker
                 if (e.KeyData == Keys.A)
                     SelectedLevel.BallI.ChangeSpeedX(-0.1);
                 if (e.KeyData == Keys.D)
-                    SelectedLevel.BallI.ChangeSpeedX(0.1);
+                    SelectedLevel.BallI.ChangeSpeedX(0.1);//
+
                 SelectedLevel.MoveBouncer(sender, e);
                 Invalidate();
             }

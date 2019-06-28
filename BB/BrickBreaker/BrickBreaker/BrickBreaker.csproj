@@ -97,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="READ.txt" />
+    <Content Include="Resources\wall_bricks_building_construction_build-512.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

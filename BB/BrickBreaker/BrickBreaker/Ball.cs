@@ -62,5 +62,16 @@ namespace BrickBreaker
             Position = new Point((int)(BallX + velocityX), (int)(BallY + velocityY));
             HitBox = new Rectangle(Position.X - Radius, Position.Y - Radius, Radius * 2, Radius * 2);
         }
+        public void ResetProperties(Point p)
+        {
+            Position = p;
+            Velocity = 1;
+            StartingDouble = 0.75;
+            Angle = StartingDouble * 2 * Math.PI;
+            velocityX = (float)(Math.Cos(Angle) * Velocity);
+            velocityY = (float)(Math.Sin(Angle) * Velocity);
+
+            HitBox = new Rectangle(Position.X - Radius, Position.Y - Radius, Radius * 2, Radius * 2);
+        }
     }
 }

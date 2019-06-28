@@ -14,7 +14,11 @@ namespace BrickBreaker
         readonly Size FULLSCREEN_SIZE;
         private Rectangle Border;
         public static Random r = new Random();
+        bool isDead = false;
 
+
+        public BrickForm f1;
+        public Label DeathLabel;
         
         public enum Direction
         {
@@ -32,11 +36,30 @@ namespace BrickBreaker
             int BOUNCER_POSITION = (int)FULLSCREEN_SIZE.Width / 2 - (int)(BOUNCER_WIDTH) / 2;
             BouncerI = new Bouncer(BOUNCER_WIDTH, 25, new Point(BOUNCER_POSITION, FULLSCREEN_SIZE.Height - 60), Color.White);
             Border = new Rectangle(0, 40, FULLSCREEN_SIZE.Width, FULLSCREEN_SIZE.Height - 72);
-        }
 
+            
+        }
+        //WORK IN PROGRESS
+        public void DrawDeathTimer(Graphics g)
+        {
+            //
+            g.Clear(Color.Yellow) ;
+            System.Threading.Thread.Sleep(100);
+
+            g.DrawString("3", new Font("Arial", 120)
+                      , new SolidBrush(Color.White)
+                      , new Point((int)FULLSCREEN_SIZE.Width / 2 - 40, FULLSCREEN_SIZE.Height - 440));
+            System.Threading.Thread.Sleep(200);
+            isDead = false;
+        }
         public void Draw(Graphics g)
         {
-            g.Clear(BACKGROUND_COLOR);
+            if (isDead)
+            {
+                DrawDeathTimer(g);
+
+            }
+
             Pen pen = new Pen(Color.LightGray, 3);
             g.DrawRectangle(pen, Border);
             foreach (Brick brick in BrickList)
@@ -72,12 +95,7 @@ namespace BrickBreaker
             }
         }
 
-        public void MoveBall()
-        {
-            CheckCollision();
-        }
-
-        private void CheckCollision()
+        public void MoveBall(Graphics g)
         {
             List<Brick> BricksLeft = new List<Brick>();
 
@@ -129,17 +147,19 @@ namespace BrickBreaker
                 BallI.velocityY = -BallI.velocityY ;
                 BallI.Position = new Point(BallI.Position.X, BallI.Position.Y + Padding);
             }
-            if (BallI.HitBox.Bottom > Border.Bottom)
+            ///***WORK IN PROGRESS***///
+            else if (BallI.HitBox.Bottom > Border.Bottom)
             {
-                BallI.velocityY = -BallI.velocityY;
-                BallI.Position = new Point(BallI.Position.X, BallI.Position.Y - Padding);
+                BallI.ResetProperties(new Point((int)FULLSCREEN_SIZE.Width / 2, FULLSCREEN_SIZE.Height - 400));
+                //treba da se sredi nekako zatoa shto crtanjeto ispagja koe se nacrta prvo gi pokriva drugite i ne se gleda tajmerot
+                DrawDeathTimer(g);
             }
-            if (BallI.HitBox.Left < Border.Left)
+            else if (BallI.HitBox.Left < Border.Left)
             {
                 BallI.velocityX = -BallI.velocityX;
                 BallI.Position = new Point(BallI.Position.X + Padding, BallI.Position.Y);
             }
-            if (BallI.HitBox.Right > Border.Right)
+            else if (BallI.HitBox.Right > Border.Right)
             {
                 BallI.velocityX = -BallI.velocityX;
                 BallI.Position = new Point(BallI.Position.X - Padding, BallI.Position.Y);
@@ -154,6 +174,7 @@ namespace BrickBreaker
             */
 
             BrickList = BricksLeft;
+            //BrickList = new List<Brick>();
 
             BallI.Move();
         }

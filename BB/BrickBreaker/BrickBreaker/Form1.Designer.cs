@@ -1,6 +1,6 @@
 ﻿namespace BrickBreaker
 {
-    partial class Form1
+    partial class BrickForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BrickForm));
             this.label1 = new System.Windows.Forms.Label();
+            this.DeathLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -42,18 +44,31 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Levels";
             // 
+            // DeathLabel
+            // 
+            this.DeathLabel.AutoSize = true;
+            this.DeathLabel.Location = new System.Drawing.Point(358, 263);
+            this.DeathLabel.Name = "DeathLabel";
+            this.DeathLabel.Size = new System.Drawing.Size(46, 17);
+            this.DeathLabel.TabIndex = 1;
+            this.DeathLabel.Text = "label2";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Black;
+            this.BackColor = System.Drawing.Color.Maroon;
             this.ClientSize = new System.Drawing.Size(882, 553);
+            this.Controls.Add(this.DeathLabel);
             this.Controls.Add(this.label1);
+            this.ForeColor = System.Drawing.SystemColors.Control;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.MaximumSize = new System.Drawing.Size(900, 600);
             this.MinimumSize = new System.Drawing.Size(900, 600);
             this.Name = "Form1";
             this.Text = "Bricks Breaker";
+            this.TopMost = true;
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.ResumeLayout(false);
@@ -64,6 +79,7 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
+        public System.Windows.Forms.Label DeathLabel;
     }
 }
 
