@@ -26,7 +26,7 @@ namespace BrickBreaker
             Radius = radius;
             Position = position;
             Coloring = coloring;
-            Velocity = 1;
+            Velocity = 10;
             StartingDouble = 0.75;
             Angle = StartingDouble*2* Math.PI;
             velocityX = (float)(Math.Cos(Angle) * Velocity);
@@ -35,6 +35,7 @@ namespace BrickBreaker
             HitBox = new Rectangle(Position.X - Radius, Position.Y - Radius, Radius * 2, Radius * 2);
         }
 
+        //Testing
         public void ChangeSpeedY(double y)
         {
             velocityY += (float)y;
@@ -42,7 +43,7 @@ namespace BrickBreaker
         public void ChangeSpeedX(double x)
         {
             velocityX += (float)x;
-        }
+        }//
         public void Draw(Graphics g)
         {
             Brush brush = new SolidBrush(Color.White);
@@ -50,9 +51,9 @@ namespace BrickBreaker
             brush.Dispose();
 
             //Testing Hitboxes
-            Pen p = new Pen(Color.Red, 2);
+            /*Pen p = new Pen(Color.Red, 2);
             g.DrawRectangle(p, HitBox);
-            p.Dispose();
+            p.Dispose();*/
         }
         public void Move()
         {
@@ -65,13 +66,27 @@ namespace BrickBreaker
         public void ResetProperties(Point p)
         {
             Position = p;
-            Velocity = 1;
+            Velocity = this.Velocity;
             StartingDouble = 0.75;
             Angle = StartingDouble * 2 * Math.PI;
             velocityX = (float)(Math.Cos(Angle) * Velocity);
             velocityY = (float)(Math.Sin(Angle) * Velocity);
 
             HitBox = new Rectangle(Position.X - Radius, Position.Y - Radius, Radius * 2, Radius * 2);
+        }
+        public void ChangeBallVelocity(Char c)
+        {
+            if (c == 'X')
+                if (velocityX < 0)
+                    velocityX -= 0.5F;
+                else
+                    velocityX += 0.5F;
+            if(c== 'Y')
+                if (velocityY < 0)
+                    velocityY -= 0.5F;
+                else
+                    velocityY += 0.5F;
+            Position = new Point(Position.X, Position.Y + 5);
         }
     }
 }

@@ -66,6 +66,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StaticLevels.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -88,6 +89,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Resources\photo-1487088678257-3a541e6e3922.webp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -97,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="READ.txt" />
+    <None Include="Resources\GameBackgroundImage.jpg" />
     <Content Include="Resources\wall_bricks_building_construction_build-512.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

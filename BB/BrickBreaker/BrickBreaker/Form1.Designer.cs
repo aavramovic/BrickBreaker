@@ -28,9 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BrickForm));
             this.label1 = new System.Windows.Forms.Label();
             this.DeathLabel = new System.Windows.Forms.Label();
+            this.MoveTimer = new System.Windows.Forms.Timer(this.components);
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // label1
@@ -53,11 +56,17 @@
             this.DeathLabel.TabIndex = 1;
             this.DeathLabel.Text = "label2";
             // 
-            // Form1
+            // MoveTimer
+            // 
+            this.MoveTimer.Enabled = true;
+            this.MoveTimer.Interval = 10;
+            this.MoveTimer.Tick += new System.EventHandler(this.MoveTimer_Tick);
+            // 
+            // BrickForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Maroon;
+            this.BackColor = System.Drawing.Color.DimGray;
             this.ClientSize = new System.Drawing.Size(882, 553);
             this.Controls.Add(this.DeathLabel);
             this.Controls.Add(this.label1);
@@ -66,7 +75,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.MaximumSize = new System.Drawing.Size(900, 600);
             this.MinimumSize = new System.Drawing.Size(900, 600);
-            this.Name = "Form1";
+            this.Name = "BrickForm";
             this.Text = "Bricks Breaker";
             this.TopMost = true;
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
@@ -80,6 +89,8 @@
 
         private System.Windows.Forms.Label label1;
         public System.Windows.Forms.Label DeathLabel;
+        private System.Windows.Forms.Timer MoveTimer;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 

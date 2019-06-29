@@ -24,7 +24,7 @@ namespace BrickBreaker
             Height = height;
             Position = position;
             Coloring = coloring;
-            Speed = 87;
+            Speed = 15;
             HitBox = new Rectangle(Position.X, Position.Y, Width, Height);
         }
 
@@ -35,9 +35,9 @@ namespace BrickBreaker
             brush.Dispose();
 
             //Testing Hitboxes
-            Pen p = new Pen(Color.Red, 2);
+            /*Pen p = new Pen(Color.Red, 2);
             g.DrawRectangle(p, HitBox);
-            p.Dispose();
+            p.Dispose();*/
         }
 
         internal void MoveLeft()
@@ -54,6 +54,12 @@ namespace BrickBreaker
 
         private void MoveHitBox()
         {
+            HitBox = new Rectangle(Position.X, Position.Y, Width, Height);
+        }
+
+        internal void ResetProperties(Point point)
+        {
+            Position = point;
             HitBox = new Rectangle(Position.X, Position.Y, Width, Height);
         }
     }

@@ -10,18 +10,21 @@ using System.Windows.Forms;
 
 namespace BrickBreaker
 {
-    enum Status
+    public enum Status
     {
         MENU,
         PLAY
     }
     public partial class BrickForm : Form
     {
-        private Game game;
-        private Status status;
+        private Game game { get; set; }
+        public Status status { get; set; }
         //private string fileName; 
-        private List<Level> Levels;
-        private Level SelectedLevel;
+        public List<Level> Levels { get; set; }
+        public Level SelectedLevel { get; set; }
+
+        private readonly StaticLevels staticLevels;
+
 
         //Constants (Секаде каде што треба да се користат се направени за само тука да се смени)
         private readonly int NUMBER_OF_LEVELS = 9;
@@ -40,25 +43,30 @@ namespace BrickBreaker
             SetStyle(ControlStyles.UserPaint, true);
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-            FULLSCREEN_SIZE = Screen.FromControl(this).Bounds.Size;
+            FULLSCREEN_SIZE = Screen.FromControl(this).WorkingArea.Size;
             if(Levels == null)
                 CreateLevels();
             game = new Game();
             DrawMainMenu();
         }
-
+        public enum BrickColor
+        {
+            RED=1,
+            GREEN=2,
+            BLUE=3
+        }
         private void CreateLevels()
         {
             Levels = new List<Level>();
 
-            int k = 4;
+            int k = 12;
             for(int i = 1; i<=NUMBER_OF_LEVELS; i++)
             {
-                Levels.Add(GenerateRandomLevel(i * k, i * k, i * k, i * k));
+                Levels.Add(GenerateRandomLevel(i * k, i * k, i * k*6, i * k*6, i, BrickColor.BLUE));
             }
         }
         
-        private Level GenerateRandomLevel(int minHeight, int maxHeight, int minWidth, int maxWidth)
+        private Level GenerateRandomLevel(int minHeight, int maxHeight, int minWidth, int maxWidth, int id, BrickColor brickColor)
         {
             List<Brick> BrickList = new List<Brick>();
             int RandomH = random.Next(minHeight, maxHeight);
@@ -69,12 +77,17 @@ namespace BrickBreaker
             {
                 for(int j = 0; j< RandomW; j++)
                 {
-                    Point brickPoint = new Point(BrickWidth * j + FULLSCREEN_SIZE.Width%RandomW/2, BrickHeight * i+SPACE_FROM_TOP);
-                    Brick brick = new Brick(BrickWidth, BrickHeight, brickPoint, Color.FromArgb(random.Next(255), random.Next(255), random.Next(255)), 3);
+                    Point brickPoint = new Point(BrickWidth * j + FULLSCREEN_SIZE.Width%RandomW/2, BrickHeight * i+SPACE_FROM_TOP+2);
+                    Brick brick = new Brick(BrickWidth, BrickHeight, brickPoint, brickColor,random.Next(1,4));
                     BrickList.Add(brick);
                 }
             }
-            return new Level(BrickList, FULLSCREEN_SIZE);
+            return new Level(BrickList, FULLSCREEN_SIZE, id);
+        }
+
+        internal void Reset()
+        {
+            throw new NotImplementedException();
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -89,11 +102,13 @@ namespace BrickBreaker
                    GraphicsUnit.Pixel);
                 Brush b = new SolidBrush(Color.White);
                 SelectedLevel.Draw(e.Graphics);
-
-                String message = String.Format("{0} - {1}", SelectedLevel.BallI.velocityX.ToString(), SelectedLevel.BallI.Position.ToString());
-
-
+                String message = String.Format("{0} - {1}", SelectedLevel.BallI.velocityY.ToString(), SelectedLevel.PlayerLives);
                 e.Graphics.DrawString(message, font, b, 0, 0);
+
+                //Slikava se iscrtuva vrz se drugo somehow
+                //e.Graphics.DrawImage(BrickBreaker.Properties.Resources.MenuBackgroundImage, SelectedLevel.Border);
+                
+
                 SelectedLevel.MoveBall(e.Graphics);
                 Invalidate();
             }
@@ -198,7 +213,7 @@ namespace BrickBreaker
         /**
          *  Креира контрола-лабела со зададени почетни x и y координати, ширина, висина и текст кој треба да се прикаже на лабелата.
          */
-        private Label CreateLabel(int x, int y, int width, int height, string text, int textSize)
+        public Label CreateLabel(int x, int y, int width, int height, string text, int textSize)
         {
             Label newLabel = new Label();
             newLabel.Location = new Point(x, y);
@@ -251,7 +266,7 @@ namespace BrickBreaker
             {
                 SelectedLevel = Levels[(int)numLevel-1];
                 Controls.Clear();
-                //Stavi vo konstruktor
+                //Stavi vo konstruktor ili izbrishi
                 SelectedLevel.f1 = this;
                 SelectedLevel.DeathLabel = DeathLabel;//
 
@@ -259,9 +274,9 @@ namespace BrickBreaker
                 this.Size = FULLSCREEN_SIZE;
 
                 this.WindowState = FormWindowState.Maximized;
+                
+                this.BackgroundImageLayout = ImageLayout.Tile;
 
-                //ne menja nisho
-                //this.BackColor = Color.Black;//
                 status = Status.PLAY;
             }
             else
@@ -282,11 +297,21 @@ namespace BrickBreaker
                 if (e.KeyData == Keys.A)
                     SelectedLevel.BallI.ChangeSpeedX(-0.1);
                 if (e.KeyData == Keys.D)
-                    SelectedLevel.BallI.ChangeSpeedX(0.1);//
+                    SelectedLevel.BallI.ChangeSpeedX(0.1);
 
                 SelectedLevel.MoveBouncer(sender, e);
                 Invalidate();
             }
+        }
+
+        private void MoveTimer_Tick(object sender, EventArgs e)
+        {
+            Invalidate();
+        }
+
+        public Level GetLevel(int i)
+        {
+            return staticLevels.GetLevel(i);
         }
     }
 }
