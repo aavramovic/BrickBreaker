@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -19,7 +22,7 @@ namespace BrickBreaker
     {
         private Game game { get; set; }
         public Status status { get; set; }
-        //private string fileName; 
+        // private string fileName; 
         public List<Level> Levels { get; set; }
         public Level SelectedLevel { get; set; }
 
@@ -29,7 +32,7 @@ namespace BrickBreaker
         //Constants (Секаде каде што треба да се користат се направени за само тука да се смени)
         private readonly int NUMBER_OF_LEVELS = 9;
         private readonly Size FULLSCREEN_SIZE;
-        private readonly Size MENU_SIZE = new Size(900, 600);
+        private readonly Size MENU_SIZE = new Size(700, 500);
         private readonly int SPACE_FROM_TOP = 40;
 
 
@@ -68,6 +71,8 @@ namespace BrickBreaker
         
         private Level GenerateRandomLevel(int minHeight, int maxHeight, int minWidth, int maxWidth, int id, BrickColor brickColor)
         {
+            // testirav nesho so ovaa linija kod, neka sedi moze za nesho kje zatreba.
+            // return new Level(new List<Brick>() { new Brick(100, 100, new Point(600, 200), BrickColor.RED, 1) }, FULLSCREEN_SIZE, id);
             List<Brick> BrickList = new List<Brick>();
             int RandomH = random.Next(minHeight, maxHeight);
             int RandomW = random.Next(minWidth, maxWidth);
@@ -109,7 +114,19 @@ namespace BrickBreaker
                 //e.Graphics.DrawImage(BrickBreaker.Properties.Resources.MenuBackgroundImage, SelectedLevel.Border);
                 
 
-                SelectedLevel.MoveBall(e.Graphics);
+                if(SelectedLevel.IsCompleted())
+                {
+                    if(game.CurrentLevel < 10 && game.CurrentLevel <= SelectedLevel.ID)
+                    {
+                        game.CurrentLevel++;
+                        game.CurrentScore += 1000; // samo za test.
+                    }
+                    LevelCompleted();
+                }
+                else
+                {
+                    SelectedLevel.MoveBall(e.Graphics);
+                }
                 MoveTimer.Enabled = true;
             }
             else
@@ -127,6 +144,8 @@ namespace BrickBreaker
         public void DrawMainMenu()
         {
             Controls.Clear();
+
+            this.WindowState = FormWindowState.Normal;
 
             Label labelBricksBreaker = CreateLabel(40, 10, 736, 103, "Bricks Breaker", 50);
             Controls.Add(labelBricksBreaker);
@@ -173,6 +192,8 @@ namespace BrickBreaker
         private void DrawSelectLevel()
         {
             Controls.Clear();
+
+            this.WindowState = FormWindowState.Normal;
 
             Button buttonBack = CreateButton(10, 10, 70, 30, "Back", 10);
             buttonBack.Click += new EventHandler(BtnBack_Click);
@@ -231,14 +252,54 @@ namespace BrickBreaker
             DrawSelectLevel();
         }
 
-        private void BtnSaveGame_Click(object sender, EventArgs e)
+        private void BtnSaveGame_Click(object sender, EventArgs e) // kje se odnesuva kako Save As ?
         {
-            throw new NotImplementedException("NOT IMPLEMENTED");
+            String fileName = null;
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Title = "Save the game";
+            dialog.Filter = "Brick Breaker file (*.brb)|*.brb";
+            if(dialog.ShowDialog() == DialogResult.OK)
+            {
+                fileName = dialog.FileName;
+            }
+            if(fileName != null)
+            {
+                using (FileStream stream = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
+                {
+                    IFormatter formatter = new BinaryFormatter();
+                    formatter.Serialize(stream, game);
+                    //
+                }
+            }
         }
 
         private void BtnLoadGame_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException("NOT IMPLEMENTED");
+            String fileName = null;
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Title = "Open a game";
+            dialog.Filter = "Brick Breaker file (*.brb)|*.brb";
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                fileName = dialog.FileName;
+            }
+            if (fileName != null)
+            {
+                try
+                {
+                    using (FileStream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.None))
+                    {
+                        IFormatter formatter = new BinaryFormatter();
+                        game = (Game)formatter.Deserialize(stream);
+                        //
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Could not load file: " + Path.GetFileName(fileName));
+                }
+            }
+            DrawMainMenu();
         }
 
         private void BtnOptions_Click(object sender, EventArgs e)
@@ -268,11 +329,12 @@ namespace BrickBreaker
                 SelectedLevel = Levels[(int)numLevel-1];
                 Controls.Clear();
                 //Stavi vo konstruktor ili izbrishi
+                SelectedLevel.ID = (int)numLevel;
                 SelectedLevel.f1 = this;
                 SelectedLevel.DeathLabel = DeathLabel;//
 
                 this.MaximumSize = new Size(0, 0);
-                this.Size = FULLSCREEN_SIZE;
+                this.Size = FULLSCREEN_SIZE; // и без ова работи
 
                 this.WindowState = FormWindowState.Maximized;
                 
@@ -318,7 +380,13 @@ namespace BrickBreaker
         private void MoveTimer_Tick_1(object sender, EventArgs e)
         {
             Invalidate();
+        }
 
+        private void LevelCompleted()
+        {
+            MoveTimer.Enabled = false;
+            MessageBox.Show("Congratulations!!! You've passed this level.", "", MessageBoxButtons.OK);
+            DrawSelectLevel();
         }
     }
 }

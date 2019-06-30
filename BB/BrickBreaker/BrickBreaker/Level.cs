@@ -7,7 +7,7 @@ namespace BrickBreaker
 {
     public class Level
     {
-        private int ID { get; set; }
+        public int ID { get; set; }
         private List<Brick> BrickList { get; set; }
         private List<Brick> BrickListTemp { get; set; }
         public Ball BallI { get; set; } // Ball Instance
@@ -54,6 +54,8 @@ namespace BrickBreaker
         public void DrawDeathTimer(Graphics g)
         {
             //NEVIDLIVA E KONTROLATA ??????
+
+            //MOZE TREBA DA SE KORISTI Invalidate(true), AMA NE SUM SIGUREN
             Label Countdown = f1.CreateLabel(FULLSCREEN_SIZE.Width / 2 - 40, FULLSCREEN_SIZE.Height - 440, 1000, 1000, "123", 100);
             Countdown.BringToFront();
             Countdown.BackColor = Color.White;
@@ -211,7 +213,12 @@ namespace BrickBreaker
         }
         public void ShowVictoryMessage()
         {
+            
+        }
 
+        public bool IsCompleted()
+        {
+            return BrickListTemp.Count == 0;
         }
 
 
