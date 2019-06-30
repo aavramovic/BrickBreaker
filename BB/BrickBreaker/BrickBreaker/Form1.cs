@@ -110,12 +110,13 @@ namespace BrickBreaker
                 
 
                 SelectedLevel.MoveBall(e.Graphics);
-                Invalidate();
+                MoveTimer.Enabled = true;
             }
             else
             {
                 this.MaximumSize = MENU_SIZE;
                 e.Graphics.DrawImageUnscaled(BrickBreaker.Properties.Resources.MenuBackgroundImage, 0, 0);
+                //MoveTimer.Enabled = false;
             }
         }
 
@@ -123,7 +124,7 @@ namespace BrickBreaker
          *  Го креира главното мени преку бришење на предходно прикажаните контроли 
          *  и динамичко креирање и додавање на соодветни нови контроли на формата.
          */
-        private void DrawMainMenu()
+        public void DrawMainMenu()
         {
             Controls.Clear();
 
@@ -312,6 +313,12 @@ namespace BrickBreaker
         public Level GetLevel(int i)
         {
             return staticLevels.GetLevel(i);
+        }
+
+        private void MoveTimer_Tick_1(object sender, EventArgs e)
+        {
+            Invalidate();
+
         }
     }
 }

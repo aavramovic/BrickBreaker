@@ -33,7 +33,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.DeathLabel = new System.Windows.Forms.Label();
             this.MoveTimer = new System.Windows.Forms.Timer(this.components);
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // label1
@@ -59,8 +58,8 @@
             // MoveTimer
             // 
             this.MoveTimer.Enabled = true;
-            this.MoveTimer.Interval = 10;
-            this.MoveTimer.Tick += new System.EventHandler(this.MoveTimer_Tick);
+            this.MoveTimer.Interval = 1;
+            this.MoveTimer.Tick += new System.EventHandler(this.MoveTimer_Tick_1);
             // 
             // BrickForm
             // 
@@ -89,8 +88,7 @@
 
         private System.Windows.Forms.Label label1;
         public System.Windows.Forms.Label DeathLabel;
-        private System.Windows.Forms.Timer MoveTimer;
-        private System.Windows.Forms.Timer timer1;
+        public System.Windows.Forms.Timer MoveTimer;
     }
 }
 

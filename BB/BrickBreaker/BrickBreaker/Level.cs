@@ -164,7 +164,7 @@ namespace BrickBreaker
                 BouncerI.ResetProperties(new Point(BOUNCER_POSITION, FULLSCREEN_SIZE.Height - 60));
                 isDead = true;
                 PlayerLives -= 1;
-                System.Threading.Thread.Sleep(1000);
+                //System.Threading.Thread.Sleep(1000);
             }
             else if (BallI.HitBox.Left < Border.Left)
             {
@@ -195,6 +195,9 @@ namespace BrickBreaker
         {
             End = DateTime.Now;
             Score = BrickList.Count - BrickListTemp.Count;
+            //f1.status = Status.MENU;
+            //f1.DrawMainMenu();
+            f1.MoveTimer.Enabled = false;
             if (MessageBox.Show("Oh, no. It seems like all your lives are gone. Do you want to try again?", Score.ToString(), MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 BrickListTemp = new List<Brick>(BrickList);
@@ -202,7 +205,13 @@ namespace BrickBreaker
             else
             {
                 f1.status = Status.MENU;
+                f1.DrawMainMenu();
             }
+            
+        }
+        public void ShowVictoryMessage()
+        {
+
         }
 
 
