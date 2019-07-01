@@ -46,7 +46,7 @@ namespace BrickBreaker
             BallI = new Ball(20, new Point((int)FULLSCREEN_SIZE.Width / 2, FULLSCREEN_SIZE.Height - 400), Color.Orange);
             BOUNCER_POSITION = FULLSCREEN_SIZE.Width / 2 - (BOUNCER_WIDTH) / 2;
             BouncerI = new Bouncer(BOUNCER_WIDTH, 25, new Point(BOUNCER_POSITION, FULLSCREEN_SIZE.Height - 60), Color.White);
-            Border = new Rectangle(0, 40, FULLSCREEN_SIZE.Width, FULLSCREEN_SIZE.Height - 72);
+            Border = new Rectangle(0, 40, FULLSCREEN_SIZE.Width, FULLSCREEN_SIZE.Height -69);
 
             Start = DateTime.Now;
         }

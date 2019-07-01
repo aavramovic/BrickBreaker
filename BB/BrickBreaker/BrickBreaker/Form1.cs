@@ -88,7 +88,7 @@ namespace BrickBreaker
             {
                 for(int j = 0; j< RandomW; j++)
                 {
-                    Point brickPoint = new Point(BrickWidth * j + FULLSCREEN_SIZE.Width%RandomW/2, BrickHeight * i+SPACE_FROM_TOP+2);
+                    Point brickPoint = new Point(BrickWidth * j + FULLSCREEN_SIZE.Width%RandomW/2, BrickHeight * i+SPACE_FROM_TOP);
                     Brick brick = new Brick(BrickWidth, BrickHeight, brickPoint, brickColor,random.Next(1,4));
                     BrickList.Add(brick);
                 }
@@ -338,7 +338,6 @@ namespace BrickBreaker
                 //Stavi vo konstruktor ili izbrishi
                 SelectedLevel.ID = (int)numLevel;
                 SelectedLevel.f1 = this;
-                SelectedLevel.DeathLabel = DeathLabel;//
 
                 this.MaximumSize = new Size(0, 0);
                 this.Size = FULLSCREEN_SIZE; // и без ова работи
