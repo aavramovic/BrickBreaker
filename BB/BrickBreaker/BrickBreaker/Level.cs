@@ -174,10 +174,8 @@ namespace BrickBreaker
 
         public void ShowEndMessage()
         {
-            End = DateTime.Now;
-            Score = BrickList.Count - BrickListTemp.Count;
             f1.MoveTimer.Enabled = false;
-            if (MessageBox.Show("Oh, no. It seems like all your lives are gone. Do you want to try again?", Score.ToString(), MessageBoxButtons.YesNo) != DialogResult.Yes)
+            if (MessageBox.Show("Oh, no. It seems like all your lives are gone. Do you want to try again?", "Git Gud", MessageBoxButtons.YesNo) != DialogResult.Yes)
             {
                 f1.status = Status.MENU;
                 f1.DrawMainMenu();

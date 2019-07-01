@@ -108,13 +108,13 @@ namespace BrickBreaker
                 FontFamily fontFamily = new FontFamily("Arial");
                 Font font = new Font("Showcard Gothic", 15, FontStyle.Regular);
                 Brush b = new SolidBrush(Color.White);
-                SelectedLevel.Draw(e.Graphics);
                 
                 String messageScore = String.Format("Level Score: {0}", SelectedLevel.CurrentScore);
                 e.Graphics.DrawString(messageScore, font, b, 5, 5);
                 String messageLives = String.Format("Lives: {0}", SelectedLevel.PlayerLives);
                 e.Graphics.DrawString(messageLives, font, b, Size.Width - 100, 5);
 
+                SelectedLevel.Draw(e.Graphics);
 
                 if (SelectedLevel.IsCompleted())
                 {
@@ -364,6 +364,8 @@ namespace BrickBreaker
                     SelectedLevel.BallI.ChangeSpeedX(-0.1);
                 if (e.KeyData == Keys.D)
                     SelectedLevel.BallI.ChangeSpeedX(0.1);
+                if (e.KeyData == Keys.Escape && status == Status.PLAY)
+                    ExitLevel();
 
                 SelectedLevel.MoveBouncer(sender, e);
                 //Invalidate(true);
@@ -395,5 +397,19 @@ namespace BrickBreaker
             DrawSelectLevel();
         }
 
+        private void ExitLevel()
+        {
+            MoveTimer.Enabled = false;
+            if (MessageBox.Show("Are you sure you want to exit the level?", "Exit Level", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                SelectedLevel.ResetLevel();
+                status = Status.MENU;
+                DrawSelectLevel();
+            }
+            else
+            {
+                MoveTimer.Enabled = true;
+            }
+        }
     }
 }
