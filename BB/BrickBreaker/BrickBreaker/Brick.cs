@@ -13,11 +13,11 @@ namespace BrickBreaker
         public int Height { get; set; }
         public Point Position { get; set; }
         public Color Coloring { get; set; }
-        public BrickBreaker.BrickForm.BrickColor BrickColor { get; set; }
+        public Game.BrickColor BrickColor { get; set; }
         public int Lives { get; set; }
         public Rectangle HitBox { get; set; }
 
-        public Brick(int width, int height, Point position, BrickBreaker.BrickForm.BrickColor brickColor,int lives)
+        public Brick(int width, int height, Point position, Game.BrickColor brickColor,int lives)
         {
             Width = width;
             Height = height;
@@ -32,7 +32,7 @@ namespace BrickBreaker
         {
             if (Lives < 1)
                 Lives = Level.r.Next(1, 4);
-            if (BrickColor == BrickBreaker.BrickForm.BrickColor.RED)
+            if (BrickColor == Game.BrickColor.RED)
             {
                 if (Lives == 3)
                     Coloring = Color.FromArgb(100, 00, 00);
@@ -41,7 +41,7 @@ namespace BrickBreaker
                 else if (Lives == 1)
                     Coloring = Color.FromArgb(238, 144, 144);
             }
-            else if (BrickColor == BrickBreaker.BrickForm.BrickColor.GREEN)
+            else if (BrickColor == Game.BrickColor.GREEN)
             {
                 if (Lives == 3)
                     Coloring = Color.FromArgb(00, 100, 00);
@@ -50,7 +50,7 @@ namespace BrickBreaker
                 else if (Lives == 1)
                     Coloring = Color.FromArgb(144, 238, 144);
             }
-            else if (BrickColor == BrickBreaker.BrickForm.BrickColor.BLUE)
+            else if (BrickColor == Game.BrickColor.BLUE)
             {
                 if (Lives == 3)
                     Coloring = Color.FromArgb(00, 00, 100);

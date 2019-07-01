@@ -20,7 +20,7 @@ namespace BrickBreaker
     }
     public partial class BrickForm : Form
     {
-        private Game game { get; set; }
+        public Game Game { get; set; }
         public Status status { get; set; }
         public List<Level> Levels { get; set; }
         public Level SelectedLevel { get; set; }
@@ -28,8 +28,6 @@ namespace BrickBreaker
         private readonly Size FULLSCREEN_SIZE;
         private readonly Size MENU_SIZE = new Size(700, 500);
         private readonly int SPACE_FROM_TOP = 40;
-        public BrickColor brickColor = BrickColor.GREEN;
-        public Difficulty difficulty = Difficulty.ADVANCED;
         private readonly Random random= new Random();
         public BrickForm()
         {
@@ -40,40 +38,25 @@ namespace BrickBreaker
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             FULLSCREEN_SIZE = Screen.FromControl(this).WorkingArea.Size;
-            
 
+            Game = new Game();
             if (Levels == null)
                 CreateLevels();
-            game = new Game();
             DrawMainMenu();
         }
-        public enum Difficulty
-        {
-            ROOKIE=1,
-            ADVANCED=2,
-            PRO=3
-        }
-        public enum BrickColor
-        {
-            RED=1,
-            GREEN=2,
-            BLUE=3
-        }
-        private void CreateLevels()
+        public void CreateLevels()
         {
             Levels = new List<Level>();
             for(int i = 1; i<=NUMBER_OF_LEVELS; i++)
             {
                 int k = i / 3;
-                int levelMultiplier = i + k + (int)difficulty-1;
-                Levels.Add(GenerateRandomLevel(levelMultiplier, i, brickColor));
+                int levelMultiplier = i + k + (int)Game.GameDifficulty-1;
+                Levels.Add(GenerateRandomLevel(levelMultiplier, i, Game.GameBrickColor));
             }
         }
         
-        private Level GenerateRandomLevel(int levelMultiplier, int id, BrickColor brickColor)
+        private Level GenerateRandomLevel(int levelMultiplier, int id, Game.BrickColor brickColor)
         {
-            // testirav nesho so ovaa linija kod, neka sedi moze za nesho kje zatreba.
-            // return new Level(new List<Brick>() { new Brick(100, 100, new Point(600, 200), BrickColor.RED, 1) }, FULLSCREEN_SIZE, id);
             List<Brick> BrickList = new List<Brick>();
             int RandomH = levelMultiplier;
             int RandomW = levelMultiplier;
@@ -109,8 +92,8 @@ namespace BrickBreaker
                 if (SelectedLevel.IsCompleted())
                 {
 
-                    if(game.CurrentLevel < 10 && game.CurrentLevel <= SelectedLevel.ID)
-                        game.CurrentLevel++;
+                    if(Game.CurrentLevel < 10 && Game.CurrentLevel <= SelectedLevel.ID)
+                        Game.CurrentLevel++;
 
 
                     LevelCompleted();
@@ -164,13 +147,13 @@ namespace BrickBreaker
             Label labelScore = CreateLabel(405, 145, 169, 53, "Level:", 26);
             Controls.Add(labelScore);
 
-            Label labelGameScore = CreateLabel(405, 190, 48, 53, game.CurrentLevel.ToString(), 26);
+            Label labelGameScore = CreateLabel(405, 190, 48, 53, Game.CurrentLevel.ToString(), 26);
             Controls.Add(labelGameScore);
 
             Label labelLevel = CreateLabel(405, 285, 169, 53, "Score:", 26);
             Controls.Add(labelLevel);
 
-            Label labelGameLevel = CreateLabel(405, 330, 169, 53, game.HighScores.Sum().ToString(), 26);
+            Label labelGameLevel = CreateLabel(405, 330, 169, 53, Game.HighScores.Sum().ToString(), 26);
             Controls.Add(labelGameLevel);
 
             status = Status.MENU;
@@ -199,7 +182,7 @@ namespace BrickBreaker
                 int dy = ((i - 1) / 3) * 110;
                 Button buttonLevel = CreateButton(120 + dx, 100 + dy, 90, 90, i.ToString(), 14);
                 buttonLevel.Tag = i;
-                buttonLevel.Enabled = i <= game.CurrentLevel ? true : false;
+                buttonLevel.Enabled = i <= Game.CurrentLevel ? true : false;
                 buttonLevel.Click += new EventHandler(BtnLevel_Click);
                 Controls.Add(buttonLevel);
             }
@@ -258,7 +241,7 @@ namespace BrickBreaker
                 using (FileStream stream = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
                     IFormatter formatter = new BinaryFormatter();
-                    formatter.Serialize(stream, game);
+                    formatter.Serialize(stream, Game);
                 }
             }
         }
@@ -279,7 +262,7 @@ namespace BrickBreaker
                     using (FileStream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.None))
                     {
                         IFormatter formatter = new BinaryFormatter();
-                        game = (Game)formatter.Deserialize(stream);
+                        Game = (Game)formatter.Deserialize(stream);
                     }
                 }
                 catch
@@ -349,21 +332,12 @@ namespace BrickBreaker
         }
         private void LevelCompleted()
         {
-            game.HighScores[SelectedLevel.ID - 1] = Math.Max(SelectedLevel.CurrentScore + (SelectedLevel.PlayerLives * 1000 * (int)difficulty)
-                            , game.HighScores[SelectedLevel.ID - 1]);
+            Game.HighScores[SelectedLevel.ID - 1] = Math.Max(SelectedLevel.CurrentScore + (SelectedLevel.PlayerLives * 1000 * (int)Game.GameDifficulty)
+                            , Game.HighScores[SelectedLevel.ID - 1]);
             SelectedLevel.ResetLevel();
             MoveTimer.Enabled = false;
             MessageBox.Show("Congratulations!!! You've passed this level.", "Level Complete", MessageBoxButtons.OK);
             DrawSelectLevel();
-        }
-        public void ChangeBrickListColor()
-        {
-            foreach (Level l in Levels)
-                foreach (Brick b in l.BrickList)
-                {
-                    b.BrickColor = brickColor;
-                    b.SetColorBasedOnLives();
-                }
         }
         private void ExitLevel()
         {

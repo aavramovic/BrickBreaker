@@ -17,17 +17,17 @@ namespace BrickBreaker
         {
             InitializeComponent();
             brickForm = b1;
-            if (b1.brickColor == BrickForm.BrickColor.BLUE)
+            if (b1.Game.GameBrickColor == Game.BrickColor.BLUE)
                 blueRadioButton.Checked = true;
-            if (b1.brickColor == BrickForm.BrickColor.RED)
+            if (b1.Game.GameBrickColor == Game.BrickColor.RED)
                 redRadioButton.Checked = true;
-            if (b1.brickColor == BrickForm.BrickColor.GREEN)
+            if (b1.Game.GameBrickColor == Game.BrickColor.GREEN)
                 greenRadioButton.Checked = true;
-            if (b1.difficulty == BrickForm.Difficulty.ROOKIE)
+            if (b1.Game.GameDifficulty == Game.Difficulty.ROOKIE)
                 rookieRadioButton.Checked = true;
-            if (b1.difficulty == BrickForm.Difficulty.ADVANCED)
+            if (b1.Game.GameDifficulty == Game.Difficulty.ADVANCED)
                 advancedRadioButton.Checked = true;
-            if (b1.difficulty == BrickForm.Difficulty.PRO)
+            if (b1.Game.GameDifficulty == Game.Difficulty.PRO)
                 proRadioButton.Checked = true;
 
         }
@@ -35,21 +35,18 @@ namespace BrickBreaker
         private void OkButton_Click(object sender, EventArgs e)
         {
             if (rookieRadioButton.Checked)
-                brickForm.difficulty = BrickForm.Difficulty.ROOKIE;
+                brickForm.Game.GameDifficulty = Game.Difficulty.ROOKIE;
             else if (advancedRadioButton.Checked)
-                brickForm.difficulty = BrickForm.Difficulty.ADVANCED;
+                brickForm.Game.GameDifficulty = Game.Difficulty.ADVANCED;
             else if (proRadioButton.Checked)
-                brickForm.difficulty = BrickForm.Difficulty.PRO;
-
-            BrickForm.BrickColor c;
+                brickForm.Game.GameDifficulty = Game.Difficulty.PRO;
             if (redRadioButton.Checked)
-                c = BrickForm.BrickColor.RED;
+                brickForm.Game.GameBrickColor = Game.BrickColor.RED;
             else if (blueRadioButton.Checked)
-                c = BrickForm.BrickColor.BLUE;
+                brickForm.Game.GameBrickColor = Game.BrickColor.BLUE;
             else
-                c = BrickForm.BrickColor.GREEN;
-            brickForm.brickColor = c;
-            brickForm.ChangeBrickListColor();
+                brickForm.Game.GameBrickColor = Game.BrickColor.GREEN;
+            brickForm.CreateLevels();
             this.Close();
         }
         private void CancelButton_Click(object sender, EventArgs e)

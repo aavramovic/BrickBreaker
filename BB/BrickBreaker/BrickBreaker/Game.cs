@@ -7,11 +7,24 @@ using System.Threading.Tasks;
 namespace BrickBreaker
 {
     [Serializable]
-    class Game
+    public class Game
     {
         public int CurrentLevel { get; set; }
         public List<int> HighScores { get; set; }
-
+        public BrickColor GameBrickColor { get; set; }
+        public Difficulty GameDifficulty { get; set; }
+        public enum Difficulty
+        {
+            ROOKIE = 1,
+            ADVANCED = 2,
+            PRO = 3
+        }
+        public enum BrickColor
+        {
+            RED = 1,
+            GREEN = 2,
+            BLUE = 3
+        }
         public Game()
         {
             CurrentLevel = 1;
@@ -20,6 +33,8 @@ namespace BrickBreaker
             {
                 HighScores.Add(0);
             }
+            GameBrickColor = BrickColor.GREEN;
+            GameDifficulty = Difficulty.ADVANCED;
         }
     }
 }
