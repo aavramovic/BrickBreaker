@@ -9,7 +9,7 @@ namespace BrickBreaker
     {
         public int ID { get; set; }
         private List<Brick> BrickList { get; set; }
-        private List<Brick> BrickListTemp { get; set; }
+        public List<Brick> BrickListTemp { get; set; }
         public Ball BallI { get; set; } // Ball Instance
         private Bouncer BouncerI { get; set; } // Bouncer Instance
         private readonly Color BACKGROUND_COLOR = Color.Black;
@@ -27,6 +27,7 @@ namespace BrickBreaker
         public int Score { get; set; }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
+        public int CurrentScore { get; set; }
 
         public enum Direction
         {
@@ -50,20 +51,6 @@ namespace BrickBreaker
             Start = DateTime.Now;
         }
 
-        //WORK IN PROGRESS
-        public void DrawDeathTimer(Graphics g)
-        {
-            //NEVIDLIVA E KONTROLATA ??????
-
-            //MOZE TREBA DA SE KORISTI Invalidate(true), AMA NE SUM SIGUREN
-            Label Countdown = f1.CreateLabel(FULLSCREEN_SIZE.Width / 2 - 40, FULLSCREEN_SIZE.Height - 440, 1000, 1000, "123", 100);
-            Countdown.BringToFront();
-            Countdown.BackColor = Color.White;
-            f1.Controls.Add(Countdown);
-            g.Clear(Color.White);
-            f1.Controls.Clear();
-        }
-
         public void Draw(Graphics g)
         {
             Pen pen = new Pen(Color.LightGray, 3);
@@ -75,10 +62,7 @@ namespace BrickBreaker
             if (isDead)
             {
                 if (PlayerLives > 0)
-                {
-                    //DrawDeathTimer(g);
-                    System.Threading.Thread.Sleep(1000);
-                }
+                    System.Threading.Thread.Sleep(420);
                 else
                     ShowEndMessage();
 
@@ -146,8 +130,11 @@ namespace BrickBreaker
                             if (Math.Abs(BallI.velocityX) < 0.5)
                                 BallI.ChangeBallVelocity('X');
                         }
-                        if (b.Lives >= 1)
+                        if (b.Lives <= 1)
+                        {
                             BricksLeft.Remove(b);
+                            CurrentScore += 10;
+                        }
                         b.Lives -= 1;
                         b.SetColorBasedOnLives();
                         break;
@@ -167,7 +154,6 @@ namespace BrickBreaker
                 BouncerI.ResetProperties(new Point(BOUNCER_POSITION, FULLSCREEN_SIZE.Height - 60));
                 isDead = true;
                 PlayerLives -= 1;
-                //System.Threading.Thread.Sleep(1000);
             }
             else if (BallI.HitBox.Left < Border.Left)
             {
@@ -182,15 +168,7 @@ namespace BrickBreaker
             if (BallI.Position.X == 22)
                 BallI.velocityX = 0.55F;
 
-            /**
-            * Za dolu ne se proveruva deka tamu ke se resetira ke stavime poseben metod sho ke odzema zivoti moze i gore srcenca sho 
-            * gi snemuva 
-            * Ima bug ako vlezesh so bouncerot vo topceto kako sho pagja od strana go cuva vo mesto
-            */
-
             BrickListTemp = BricksLeft;
-            //BrickList = new List<Brick>();
-
             BallI.Move();
         }
 
@@ -198,23 +176,20 @@ namespace BrickBreaker
         {
             End = DateTime.Now;
             Score = BrickList.Count - BrickListTemp.Count;
-            //f1.status = Status.MENU;
-            //f1.DrawMainMenu();
             f1.MoveTimer.Enabled = false;
-            if (MessageBox.Show("Oh, no. It seems like all your lives are gone. Do you want to try again?", Score.ToString(), MessageBoxButtons.YesNo) == DialogResult.Yes)
-            {
-                BrickListTemp = new List<Brick>(BrickList);
-            }
-            else
+            if (MessageBox.Show("Oh, no. It seems like all your lives are gone. Do you want to try again?", Score.ToString(), MessageBoxButtons.YesNo) != DialogResult.Yes)
             {
                 f1.status = Status.MENU;
                 f1.DrawMainMenu();
             }
-            
+            ResetLevel();
         }
-        public void ShowVictoryMessage()
+
+        public void ResetLevel()
         {
-            
+            BrickListTemp = new List<Brick>(BrickList);
+            PlayerLives = 3;
+            CurrentScore = 0;
         }
 
         public bool IsCompleted()

@@ -10,11 +10,20 @@ namespace BrickBreaker
     class Game
     {
         public int CurrentLevel { get; set; }
-        public int CurrentScore { get; set; }
+        public List<int> HighScores { get; set; }
+
         public Game()
         {
             CurrentLevel = 1;
-            CurrentScore = 0;
+            HighScores = new List<int>();
+            for(int i=0; i<9; i++)
+            {
+                HighScores.Add(0);
+            }
+
+        /*
+        if (CurrentScore > HighScores[CurrentLevel])
+            HighScores[CurrentLevel] = CurrentScore;*/
         }
     }
 }

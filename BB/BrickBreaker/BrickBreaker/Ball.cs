@@ -27,7 +27,7 @@ namespace BrickBreaker
             Position = position;
             Coloring = coloring;
             Velocity = 10;
-            StartingDouble = 0.75;
+            StartingDouble = 0.25;
             Angle = StartingDouble*2* Math.PI;
             velocityX = (float)(Math.Cos(Angle) * Velocity);
             velocityY = (float)(Math.Sin(Angle) * Velocity);

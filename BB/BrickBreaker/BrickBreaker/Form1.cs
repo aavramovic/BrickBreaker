@@ -62,10 +62,16 @@ namespace BrickBreaker
         {
             Levels = new List<Level>();
 
-            int k = 12;
+            int k=0;
             for(int i = 1; i<=NUMBER_OF_LEVELS; i++)
             {
-                Levels.Add(GenerateRandomLevel(i, i, i, i, i, BrickColor.BLUE));
+                if (i >= 1 && i <= 3)
+                    k = 2;
+                if (i >= 4 && i <= 6)
+                    k = 3;
+                if (i >= 7 && i <=9)
+                    k = 4;
+                Levels.Add(GenerateRandomLevel(i+k, i+k, i+k, i+k, i+k, BrickColor.BLUE));
             }
         }
         
@@ -107,20 +113,18 @@ namespace BrickBreaker
                    GraphicsUnit.Pixel);
                 Brush b = new SolidBrush(Color.White);
                 SelectedLevel.Draw(e.Graphics);
-                String message = String.Format("{0} - {1}", SelectedLevel.BallI.velocityY.ToString(), SelectedLevel.PlayerLives);
+                
+                String message = String.Format("{0} - {1}", SelectedLevel.CurrentScore.ToString(), SelectedLevel.PlayerLives);
                 e.Graphics.DrawString(message, font, b, 0, 0);
-
-                //Slikava se iscrtuva vrz se drugo somehow
-                //e.Graphics.DrawImage(BrickBreaker.Properties.Resources.MenuBackgroundImage, SelectedLevel.Border);
                 
 
                 if(SelectedLevel.IsCompleted())
                 {
+
                     if(game.CurrentLevel < 10 && game.CurrentLevel <= SelectedLevel.ID)
-                    {
                         game.CurrentLevel++;
-                        game.CurrentScore += 1000; // samo za test.
-                    }
+
+
                     LevelCompleted();
                 }
                 else
@@ -133,7 +137,6 @@ namespace BrickBreaker
             {
                 this.MaximumSize = MENU_SIZE;
                 e.Graphics.DrawImageUnscaled(BrickBreaker.Properties.Resources.MenuBackgroundImage, 0, 0);
-                //MoveTimer.Enabled = false;
             }
         }
 
@@ -179,7 +182,7 @@ namespace BrickBreaker
             Label labelLevel = CreateLabel(405, 285, 169, 53, "Score:", 26);
             Controls.Add(labelLevel);
 
-            Label labelGameLevel = CreateLabel(405, 330, 169, 53, game.CurrentScore.ToString(), 26);
+            Label labelGameLevel = CreateLabel(405, 330, 169, 53, game.HighScores.Sum().ToString(), 26);
             Controls.Add(labelGameLevel);
 
             status = Status.MENU;
@@ -304,7 +307,11 @@ namespace BrickBreaker
 
         private void BtnOptions_Click(object sender, EventArgs e)
         {
-            new Options().Show();
+            this.SendToBack();
+
+            Options options = new Options();
+            options.Show();
+            options.BringToFront();
         }
 
         private void BtnQuit_Click(object sender, EventArgs e)
@@ -354,7 +361,7 @@ namespace BrickBreaker
             {
                 //Testing Controls
                 if (e.KeyData == Keys.W)
-                    SelectedLevel.BallI.ChangeSpeedY(0.1);
+                    SelectedLevel.BrickListTemp = new List<Brick>();
                 if (e.KeyData == Keys.S)
                     SelectedLevel.BallI.ChangeSpeedY(-0.1);
                 if (e.KeyData == Keys.A)
@@ -363,13 +370,13 @@ namespace BrickBreaker
                     SelectedLevel.BallI.ChangeSpeedX(0.1);
 
                 SelectedLevel.MoveBouncer(sender, e);
-                Invalidate();
+                Invalidate(true);
             }
         }
 
         private void MoveTimer_Tick(object sender, EventArgs e)
         {
-            Invalidate();
+            Invalidate(true);
         }
 
         public Level GetLevel(int i)
@@ -379,14 +386,18 @@ namespace BrickBreaker
 
         private void MoveTimer_Tick_1(object sender, EventArgs e)
         {
-            Invalidate();
+            Invalidate(true);
         }
 
         private void LevelCompleted()
         {
+            game.HighScores[SelectedLevel.ID - 1] = Math.Max(SelectedLevel.CurrentScore + (SelectedLevel.PlayerLives * 10)
+                            , game.HighScores[SelectedLevel.ID - 1]);
+            SelectedLevel.ResetLevel();
             MoveTimer.Enabled = false;
             MessageBox.Show("Congratulations!!! You've passed this level.", "", MessageBoxButtons.OK);
             DrawSelectLevel();
         }
+
     }
 }
