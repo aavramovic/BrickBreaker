@@ -63,16 +63,6 @@ namespace BrickBreaker.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap GameBackgroundImage {
-            get {
-                object obj = ResourceManager.GetObject("GameBackgroundImage", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap MenuBackgroundImage {
             get {
                 object obj = ResourceManager.GetObject("MenuBackgroundImage", resourceCulture);

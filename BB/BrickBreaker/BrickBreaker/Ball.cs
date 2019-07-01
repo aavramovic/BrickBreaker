@@ -8,16 +8,12 @@ namespace BrickBreaker
         public int Radius { get; set; }
         public Point Position { get; set; }
         public Color Coloring { get; set; }
-
         public double Velocity { get; set; }
         public double Angle { get; set; }
         private double StartingDouble { get; set; }
-
         public static Random r = new Random();
-
         public float velocityX;
         public float velocityY;
-
         public Rectangle HitBox { get; set; }
 
 
@@ -26,7 +22,7 @@ namespace BrickBreaker
             Radius = radius;
             Position = position;
             Coloring = coloring;
-            Velocity = 10;
+            Velocity = 9;
             StartingDouble = 0.25;
             Angle = StartingDouble*2* Math.PI;
             velocityX = (float)(Math.Cos(Angle) * Velocity);
@@ -34,16 +30,6 @@ namespace BrickBreaker
 
             HitBox = new Rectangle(Position.X - Radius, Position.Y - Radius, Radius * 2, Radius * 2);
         }
-
-        //Testing
-        public void ChangeSpeedY(double y)
-        {
-            velocityY += (float)y;
-        }
-        public void ChangeSpeedX(double x)
-        {
-            velocityX += (float)x;
-        }//
         public void Draw(Graphics g)
         {
             Brush brush = new SolidBrush(Color.White);
@@ -76,16 +62,17 @@ namespace BrickBreaker
         }
         public void ChangeBallVelocity(Char c)
         {
+            float k = 0.6F;
             if (c == 'X')
                 if (velocityX < 0)
-                    velocityX -= 0.5F;
+                    velocityX = -k;
                 else
-                    velocityX += 0.5F;
+                    velocityX = k;
             if(c== 'Y')
                 if (velocityY < 0)
-                    velocityY -= 0.5F;
+                    velocityY = -k;
                 else
-                    velocityY += 0.5F;
+                    velocityY = k;
             Position = new Point(Position.X, Position.Y + 5);
         }
     }

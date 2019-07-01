@@ -20,10 +20,6 @@ namespace BrickBreaker
             {
                 HighScores.Add(0);
             }
-
-        /*
-        if (CurrentScore > HighScores[CurrentLevel])
-            HighScores[CurrentLevel] = CurrentScore;*/
         }
     }
 }

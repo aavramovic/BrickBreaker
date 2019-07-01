@@ -52,7 +52,6 @@ namespace BrickBreaker
             brickForm.ChangeBrickListColor();
             this.Close();
         }
-
         private void CancelButton_Click(object sender, EventArgs e)
         {
             this.Close();
