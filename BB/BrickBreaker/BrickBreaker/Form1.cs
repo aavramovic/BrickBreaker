@@ -106,19 +106,17 @@ namespace BrickBreaker
             if(status == Status.PLAY)
             {
                 FontFamily fontFamily = new FontFamily("Arial");
-                Font font = new Font(
-                   fontFamily,
-                   16,
-                   FontStyle.Regular,
-                   GraphicsUnit.Pixel);
+                Font font = new Font("Showcard Gothic", 15, FontStyle.Regular);
                 Brush b = new SolidBrush(Color.White);
                 SelectedLevel.Draw(e.Graphics);
                 
-                String message = String.Format("{0} - {1}", SelectedLevel.CurrentScore.ToString(), SelectedLevel.PlayerLives);
-                e.Graphics.DrawString(message, font, b, 0, 0);
-                
+                String messageScore = String.Format("Level Score: {0}", SelectedLevel.CurrentScore);
+                e.Graphics.DrawString(messageScore, font, b, 5, 5);
+                String messageLives = String.Format("Lives: {0}", SelectedLevel.PlayerLives);
+                e.Graphics.DrawString(messageLives, font, b, Size.Width - 100, 5);
 
-                if(SelectedLevel.IsCompleted())
+
+                if (SelectedLevel.IsCompleted())
                 {
 
                     if(game.CurrentLevel < 10 && game.CurrentLevel <= SelectedLevel.ID)
@@ -218,7 +216,6 @@ namespace BrickBreaker
 
             status = Status.MENU;
         }
-
 
         /**
          *  Креира контрола-копче со зададени почетни x и y координати, ширина, висина и текст кој треба да се прикаже на копчето.
@@ -369,7 +366,7 @@ namespace BrickBreaker
                     SelectedLevel.BallI.ChangeSpeedX(0.1);
 
                 SelectedLevel.MoveBouncer(sender, e);
-                Invalidate(true);
+                //Invalidate(true);
             }
         }
 

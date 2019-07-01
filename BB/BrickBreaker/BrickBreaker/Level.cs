@@ -53,7 +53,7 @@ namespace BrickBreaker
 
         public void Draw(Graphics g)
         {
-            Pen pen = new Pen(Color.LightGray, 3);
+            Pen pen = new Pen(Color.DarkGray, 3);
             g.DrawRectangle(pen, Border);
             foreach (Brick brick in BrickListTemp)
                 brick.Draw(g);
@@ -190,6 +190,8 @@ namespace BrickBreaker
             BrickListTemp = new List<Brick>(BrickList);
             PlayerLives = 3;
             CurrentScore = 0;
+            BallI.ResetProperties(new Point(FULLSCREEN_SIZE.Width / 2, FULLSCREEN_SIZE.Height - 400));
+            BouncerI.ResetProperties(new Point(BOUNCER_POSITION, FULLSCREEN_SIZE.Height - 60));
         }
 
         public bool IsCompleted()
