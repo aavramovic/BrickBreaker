@@ -8,7 +8,7 @@ namespace BrickBreaker
     public class Level
     {
         public int ID { get; set; }
-        private List<Brick> BrickList { get; set; }
+        public List<Brick> BrickList { get; set; }
         public List<Brick> BrickListTemp { get; set; }
         public Ball BallI { get; set; } // Ball Instance
         private Bouncer BouncerI { get; set; } // Bouncer Instance
@@ -175,9 +175,10 @@ namespace BrickBreaker
         public void ShowEndMessage()
         {
             End = DateTime.Now;
-            Score = BrickList.Count - BrickListTemp.Count;
+            
+
             f1.MoveTimer.Enabled = false;
-            if (MessageBox.Show("Oh, no. It seems like all your lives are gone. Do you want to try again?", Score.ToString(), MessageBoxButtons.YesNo) != DialogResult.Yes)
+            if (MessageBox.Show("Oh, no. It seems like all your lives are gone. Do you want to try again?", CurrentScore.ToString(), MessageBoxButtons.YesNo) != DialogResult.Yes)
             {
                 f1.status = Status.MENU;
                 f1.DrawMainMenu();

@@ -34,7 +34,8 @@ namespace BrickBreaker
         private readonly Size FULLSCREEN_SIZE;
         private readonly Size MENU_SIZE = new Size(700, 500);
         private readonly int SPACE_FROM_TOP = 40;
-
+        public BrickColor brickColor = BrickColor.GREEN;
+        public Difficulty difficulty = Difficulty.ADVANCED;
 
         private readonly Random random= new Random();
 
@@ -47,10 +48,18 @@ namespace BrickBreaker
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             FULLSCREEN_SIZE = Screen.FromControl(this).WorkingArea.Size;
-            if(Levels == null)
+            
+
+            if (Levels == null)
                 CreateLevels();
             game = new Game();
             DrawMainMenu();
+        }
+        public enum Difficulty
+        {
+            ROOKIE=1,
+            ADVANCED=2,
+            PRO=3
         }
         public enum BrickColor
         {
@@ -61,27 +70,21 @@ namespace BrickBreaker
         private void CreateLevels()
         {
             Levels = new List<Level>();
-
-            int k=0;
             for(int i = 1; i<=NUMBER_OF_LEVELS; i++)
             {
-                if (i >= 1 && i <= 3)
-                    k = 2;
-                if (i >= 4 && i <= 6)
-                    k = 3;
-                if (i >= 7 && i <=9)
-                    k = 4;
-                Levels.Add(GenerateRandomLevel(i+k, i+k, i+k, i+k, i+k, BrickColor.BLUE));
+                int k = i / 3;
+                int levelMultiplier = i + k + (int)difficulty-1;
+                Levels.Add(GenerateRandomLevel(levelMultiplier, i, brickColor));
             }
         }
         
-        private Level GenerateRandomLevel(int minHeight, int maxHeight, int minWidth, int maxWidth, int id, BrickColor brickColor)
+        private Level GenerateRandomLevel(int levelMultiplier, int id, BrickColor brickColor)
         {
             // testirav nesho so ovaa linija kod, neka sedi moze za nesho kje zatreba.
             // return new Level(new List<Brick>() { new Brick(100, 100, new Point(600, 200), BrickColor.RED, 1) }, FULLSCREEN_SIZE, id);
             List<Brick> BrickList = new List<Brick>();
-            int RandomH = random.Next(minHeight, maxHeight);
-            int RandomW = random.Next(minWidth, maxWidth);
+            int RandomH = levelMultiplier;
+            int RandomW = levelMultiplier;
             int BrickWidth = (FULLSCREEN_SIZE.Width / RandomW);
             int BrickHeight = FULLSCREEN_SIZE.Height / 4 / RandomH;
             for (int i = 0; i < RandomH; i++)
@@ -253,6 +256,7 @@ namespace BrickBreaker
         private void BtnPlay_Click(object sender, EventArgs e)
         {
             DrawSelectLevel();
+
         }
 
         private void BtnSaveGame_Click(object sender, EventArgs e) // kje se odnesuva kako Save As ?
@@ -307,9 +311,8 @@ namespace BrickBreaker
 
         private void BtnOptions_Click(object sender, EventArgs e)
         {
+            Options options = new Options(this);
             this.SendToBack();
-
-            Options options = new Options();
             options.Show();
             options.BringToFront();
         }
@@ -398,5 +401,14 @@ namespace BrickBreaker
             DrawSelectLevel();
         }
 
+        public void ChangeBrickListColor()
+        {
+            foreach (Level l in Levels)
+                foreach (Brick b in l.BrickList)
+                {
+                    b.BrickColor = brickColor;
+                    b.SetColorBasedOnLives();
+                }
+        }
     }
 }
