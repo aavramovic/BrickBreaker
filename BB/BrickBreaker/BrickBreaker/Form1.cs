@@ -65,7 +65,7 @@ namespace BrickBreaker
             int k = 12;
             for(int i = 1; i<=NUMBER_OF_LEVELS; i++)
             {
-                Levels.Add(GenerateRandomLevel(i * k, i * k, i * k*6, i * k*6, i, BrickColor.BLUE));
+                Levels.Add(GenerateRandomLevel(i, i, i, i, i, BrickColor.BLUE));
             }
         }
         

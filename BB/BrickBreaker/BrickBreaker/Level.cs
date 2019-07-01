@@ -145,7 +145,7 @@ namespace BrickBreaker
                             if (Math.Abs(BallI.velocityX) < 0.5)
                                 BallI.ChangeBallVelocity('X');
                         }
-                        if (b.Lives == 1)
+                        if (b.Lives >= 1)
                             BricksLeft.Remove(b);
                         b.Lives -= 1;
                         b.SetColorBasedOnLives();

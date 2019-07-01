@@ -30,33 +30,35 @@ namespace BrickBreaker
 
         public void SetColorBasedOnLives()
         {
-            if(BallColor == BrickBreaker.BrickForm.BrickColor.RED)
+            if (Lives < 1)
+                Lives = Level.r.Next(1, 4);
+            if (BallColor == BrickBreaker.BrickForm.BrickColor.RED)
+            {
                 if (Lives == 3)
                     Coloring = Color.FromArgb(100, 00, 00);
                 else if (Lives == 2)
                     Coloring = Color.FromArgb(128, 00, 00);
                 else if (Lives == 1)
                     Coloring = Color.FromArgb(238, 144, 144);
-                else
-                    Coloring = Color.White;
-            if (BallColor == BrickBreaker.BrickForm.BrickColor.GREEN)
-                    if (Lives == 3)
+            }
+            else if (BallColor == BrickBreaker.BrickForm.BrickColor.GREEN)
+            {
+                if (Lives == 3)
                     Coloring = Color.FromArgb(00, 100, 00);
                 else if (Lives == 2)
                     Coloring = Color.FromArgb(00, 128, 00);
                 else if (Lives == 1)
                     Coloring = Color.FromArgb(144, 238, 144);
-                else
-                    Coloring = Color.White;
-            if (BallColor == BrickBreaker.BrickForm.BrickColor.BLUE)
+            }
+            else if (BallColor == BrickBreaker.BrickForm.BrickColor.BLUE)
+            {
                 if (Lives == 3)
                     Coloring = Color.FromArgb(00, 00, 100);
                 else if (Lives == 2)
                     Coloring = Color.FromArgb(00, 00, 128);
                 else if (Lives == 1)
                     Coloring = Color.FromArgb(144, 144, 238);
-                else
-                    Coloring = Color.White;
+            }
         }
 
         public void Draw(Graphics g)
