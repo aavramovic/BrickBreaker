@@ -84,6 +84,7 @@ namespace BrickBreaker
 
                 isDead = false;
             }
+            pen.Dispose();
         }
 
         public void MoveBouncer(object sender, KeyEventArgs e)
