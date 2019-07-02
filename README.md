@@ -14,8 +14,7 @@ Bricks Breaker. Преработката е реализирана со потп
 По стартувањето на играта, се појавува главното мени на кое има неколку
 опции и тоа изгледа вака
 
-![Main Menu image](https://github.com/TheRuinKing/BrickBreaker/blob/master/BB/Documentation%20images/Level%20Select%20Menu.png){width="6.408333333333333in"
-height="3.2916666666666665in"}Од левата страна се прикажани опциите за
+![Main Menu image](BB/Documentation%20images/Level%20Select%20Menu.png)Од левата страна се прикажани опциите за
 избор, додека пак од десната е прикажано моменталното ниво до кое
 играчот стигнал и неговиот моментален број на освоени поени.
 
